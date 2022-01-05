@@ -1,5 +1,5 @@
 {
-  "name": "@uniswap-v2-app/contracts",
-  "version": "1.0.0",
+  "name": "contracts",
+  "version": "0.0.1",
   "main": "./src/index.js"
 }
