@@ -1,5 +1,5 @@
 {
-  "name": "color-nfts",
+  "name": "color-nfts-dapp",
   "version": "1.0.0",
   "description": "Color NFTs based on ERC721.",
   "author": {
@@ -20,11 +20,11 @@
   ],
   "private": true,
   "scripts": {
-    "dev": "yarn workspace frontend dev",
-    "build": "yarn workspace frontend build",
-    "start": "yarn workspace frontend start",
-    "lint": "yarn workspace frontend lint",
-    "ipfs": "yarn workspace frontend ipfs"
+    "dev": "yarn workspace @dapp/frontend dev",
+    "build": "yarn workspace @dapp/frontend build",
+    "start": "yarn workspace @dapp/frontend start",
+    "lint": "yarn workspace @dapp/frontend lint",
+    "ipfs": "yarn workspace @dapp/frontend ipfs"
   },
   "workspaces": {
     "packages": [
