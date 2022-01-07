@@ -13,10 +13,14 @@
   "license": "MIT",
   "keywords": [
     "nfts",
-    "ethereum",
-    "react",
     "workspaces",
-    "yarn"
+    "yarn",
+    "ethereum",
+    "smart-contracts",
+    "hardhat",
+    "solidity",
+    "react",
+    "nextjs"
   ],
   "private": true,
   "scripts": {

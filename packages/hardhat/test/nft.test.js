@@ -1,9 +1,9 @@
 const { ethers } = require("hardhat");
 
-describe("NFTMarket", function () {
+describe("Market", function () {
   it("Should create and execute market sales", async function () {
-    const Market = await ethers.getContractFactory("NFTMarket");
-    const market = await Market.deploy("Hello, world!");
+    const Market = await ethers.getContractFactory("Market");
+    const market = await Market.deploy();
     await market.deployed();
     const marketAddress = market.address;
 
@@ -20,10 +20,10 @@ describe("NFTMarket", function () {
     await nft.createToken("https://www.mytokenlocation.com");
     await nft.createToken("https://www.mytokenlocation2.com");
 
-    await market.createMarketItem(nftAddress, 1, auctionPrice, listingPrice, {
+    await market.createMarketItem(nftAddress, 1, auctionPrice, {
       value: listingPrice,
     });
-    await market.createMarketItem(nftAddress, 2, auctionPrice, listingPrice, {
+    await market.createMarketItem(nftAddress, 2, auctionPrice, {
       value: listingPrice,
     });
 
@@ -34,7 +34,21 @@ describe("NFTMarket", function () {
       .connect(buyerAddress)
       .createMarketSale(nftAddress, 1, { value: auctionPrice });
 
-    const items = await market.getMarketItems();
+    let items = await market.fetchMarketItems();
+    items = await Promise.all(
+      items.map(async (item) => {
+        const tokenUri = await nft.tokenURI(item.tokenId);
+
+        return {
+          tokenUri: tokenUri.toString(),
+          price: item.price.toString(),
+          tokenId: item.tokenId.toString(),
+          seller: item.seller,
+          owner: item.owner,
+          sold: item.sold,
+        };
+      })
+    );
 
     console.log(items);
   });

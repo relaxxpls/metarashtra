@@ -5,7 +5,11 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 
-contract NFTMarketplace is ReentrancyGuard {
+/**
+ * @title Market Contract
+ * @notice This contract is used to create a marketplace for the transfer/sale of NFTs.
+ */
+contract Market is ReentrancyGuard {
   using Counters for Counters.Counter;
   Counters.Counter private _itemIds;
   Counters.Counter private _itemsSold;
@@ -43,6 +47,9 @@ contract NFTMarketplace is ReentrancyGuard {
     return listingPrice;
   }
 
+  /**
+   * @notice Adds an nft to the marketplace.
+   */
   function createMarketItem(
     address nftContract,
     uint256 tokenId,
@@ -94,10 +101,10 @@ contract NFTMarketplace is ReentrancyGuard {
     idToMarketItem[itemId].owner = payable(msg.sender);
     idToMarketItem[itemId].sold = true;
     _itemsSold.increment();
-    owner.transfer(msg.value);
+    payable(owner).transfer(listingPrice);
   }
 
-  // aka "fetchItemsUnowned"
+  // aka "fetchItemsOwnedByMarket"
   function fetchMarketItems() public view returns (MarketItem[] memory) {
     uint256 itemCount = _itemIds.current();
     uint256 unsoldItemCount = itemCount - _itemsSold.current();
