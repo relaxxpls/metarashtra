@@ -34,18 +34,6 @@ module.exports = {
         props: true,
       },
     ],
-    "no-restricted-imports": [
-      "error",
-      {
-        paths: [
-          {
-            name: "styled-components",
-            message: "Please import from 'styled-components/macro.'",
-          },
-        ],
-        patterns: ["!styled-components/macro"],
-      },
-    ],
     "no-unused-expressions": "warn",
     "no-unused-vars": "warn",
     "import/extensions": [
