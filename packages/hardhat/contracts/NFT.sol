@@ -24,30 +24,4 @@ contract NFT is ERC721URIStorage {
 
     return newItemId;
   }
-
-  // string[] public colors;
-  // mapping(string => bool) _colorExists;
-  // function _beforeTokenTransfer(
-  //   address from,
-  //   address to,
-  //   uint256 tokenId
-  // ) internal override(ERC721, ERC721Enumerable) {
-  //   super._beforeTokenTransfer(from, to, tokenId);
-  // }
-  // function supportsInterface(bytes4 interfaceId)
-  //   public
-  //   view
-  //   override(ERC721, ERC721Enumerable)
-  //   returns (bool)
-  // {
-  //   return super.supportsInterface(interfaceId);
-  // }
-
-  // function mint(string memory _color) public {
-  //   require(!_colorExists[_color], "Color already exists");
-  //   colors.push(_color);
-  //   uint256 _id = colors.length;
-  //   _mint(msg.sender, _id);
-  //   _colorExists[_color] = true;
-  // }
 }
