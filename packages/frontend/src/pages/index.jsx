@@ -1,6 +1,8 @@
 import { gql } from "@apollo/client";
+import { ethers } from "ethers";
 import Head from "next/head";
 import { HiOutlineLink } from "react-icons/hi";
+import Web3Modal from "web3modal";
 
 import client from "../apollo-client";
 import styles from "../styles/Home.module.css";
