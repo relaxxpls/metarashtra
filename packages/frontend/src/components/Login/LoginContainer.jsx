@@ -52,7 +52,7 @@ export const LoggedinContainer = () => {
 };
 
 export const LoginContainer = () => {
-  const { connector, activate, active } = useWeb3React();
+  const { activate } = useWeb3React();
 
   const [loading, setLoading] = useState(false);
 
@@ -114,8 +114,6 @@ export const LoginContainer = () => {
   );
 };
 
-// export default LoginContainer;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -126,6 +124,9 @@ const Container = styled.div`
   padding: 3rem 2rem;
   border: 1px solid lightgrey;
   border-radius: 8px;
+  margin: 5rem auto;
+  height: fit-content;
+  background: #ffffff;
 `;
 
 const WalletList = styled.div`
