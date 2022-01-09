@@ -1,6 +1,7 @@
 import { useWeb3React } from "@web3-react/core";
 import { Button, message, Spin } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -12,6 +13,7 @@ const MESSAGE = "I accept relaxxpls as god.";
 export const LoggedinContainer = () => {
   const { account, deactivate, library } = useWeb3React();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   if (!(library && account)) return null;
 
@@ -33,13 +35,20 @@ export const LoggedinContainer = () => {
     message.success("Logged out succesfully");
   };
 
+  const handlePlayRedirect = () => {
+    message.success("Redirecting to the game...");
+    router.push("/play");
+  };
+
   return (
     <PageCard>
       <Spin spinning={loading}>
         <WalletList>
           <h1>Welcome {account}</h1>
-          <StyledButton type="primary" onClick={handleSignMessage}>
-            Sign Message
+          <StyledButton onClick={handleSignMessage}>Sign Message</StyledButton>
+
+          <StyledButton type="primary" onClick={handlePlayRedirect}>
+            Play
           </StyledButton>
 
           <StyledButton type="primary" danger onClick={handleDeactivate}>
@@ -132,6 +141,7 @@ const StyledButton = styled(Button)`
   border-radius: 8px;
   padding: 1rem;
   width: 100%;
+  max-width: 10rem;
 
   &:focus,
   &:hover {
