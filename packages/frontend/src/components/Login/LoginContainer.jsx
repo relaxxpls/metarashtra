@@ -8,26 +8,51 @@ import { injected, walletconnect } from "../../connectors";
 
 const MESSAGE = "I accept relaxxpls as god.";
 
-const SignMessage = () => {
-  const { library, account } = useWeb3React();
-
-  const handleSignMessage = async () => {
-    try {
-      const signature = await library.getSigner(account).signMessage(MESSAGE);
-      window.alert(`Success!\n\n${signature}`);
-    } catch (error) {
-      window.alert("Failure!" + (error.message ? `\n\n${error.message}` : ""));
-    }
-  };
+export const LoggedinContainer = () => {
+  const { account, deactivate, library } = useWeb3React();
+  const [loading, setLoading] = useState(false);
 
   if (!(library && account)) return null;
 
-  return <StyledButton onClick={handleSignMessage}>Sign Message</StyledButton>;
+  const handleSignMessage = async () => {
+    try {
+      setLoading(true);
+      const signature = await library.getSigner(account).signMessage(MESSAGE);
+      console.log(signature);
+      message.success("Success on the signature!");
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeactivate = () => {
+    deactivate();
+    message.success("Logged out succesfully");
+  };
+
+  return (
+    <Container>
+      <h1>Welcome {account}</h1>
+
+      <Spin spinning={loading}>
+        <WalletList>
+          <StyledButton type="primary" onClick={handleSignMessage}>
+            Sign Message
+          </StyledButton>
+
+          <StyledButton type="primary" danger onClick={handleDeactivate}>
+            Logout
+          </StyledButton>
+        </WalletList>
+      </Spin>
+    </Container>
+  );
 };
 
-const LoginContainer = () => {
-  const { connector, library, account, activate, deactivate, active } =
-    useWeb3React();
+export const LoginContainer = () => {
+  const { connector, activate, active } = useWeb3React();
 
   const [loading, setLoading] = useState(false);
 
@@ -83,15 +108,13 @@ const LoginContainer = () => {
           >
             WalletConnect
           </StyledButton>
-
-          <SignMessage />
         </WalletList>
       </Spin>
     </Container>
   );
 };
 
-export default LoginContainer;
+// export default LoginContainer;
 
 const Container = styled.div`
   display: flex;

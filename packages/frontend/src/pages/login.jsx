@@ -1,8 +1,14 @@
+import { useWeb3React } from "@web3-react/core";
 import Head from "next/head";
 
-import LoginContainer from "../components/Login/LoginContainer";
+import {
+  LoginContainer,
+  LoggedinContainer,
+} from "../components/Login/LoginContainer";
 
 const Login = () => {
+  const { active } = useWeb3React();
+
   return (
     <>
       <Head>
@@ -10,7 +16,7 @@ const Login = () => {
         <meta name="description" content="Login" />
       </Head>
 
-      <LoginContainer />
+      {active ? <LoggedinContainer /> : <LoginContainer />}
     </>
   );
 };
