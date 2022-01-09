@@ -1,11 +1,12 @@
 import { useWeb3React } from "@web3-react/core";
-import { Button, message, Spin } from "antd";
+import { message, Spin } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 
 import { injected, walletconnect } from "../../connectors";
+import Button from "../shared/Button";
 import { PageCard } from "../shared/Page";
 
 const MESSAGE = "I accept relaxxpls as god.";
@@ -45,15 +46,15 @@ export const LoggedinContainer = () => {
       <Spin spinning={loading}>
         <WalletList>
           <h1>Welcome {account}</h1>
-          <StyledButton onClick={handleSignMessage}>Sign Message</StyledButton>
+          <Button onClick={handleSignMessage}>Sign Message</Button>
 
-          <StyledButton type="primary" onClick={handlePlayRedirect}>
+          <Button type="primary" onClick={handlePlayRedirect}>
             Play
-          </StyledButton>
+          </Button>
 
-          <StyledButton type="primary" danger onClick={handleDeactivate}>
+          <Button type="primary" danger onClick={handleDeactivate}>
             Logout
-          </StyledButton>
+          </Button>
         </WalletList>
       </Spin>
     </PageCard>
@@ -86,7 +87,7 @@ export const LoginContainer = () => {
         <WalletList>
           <h1>Choose Your Wallet</h1>
 
-          <StyledButton
+          <Button
             type="text"
             size="large"
             icon={
@@ -100,9 +101,9 @@ export const LoginContainer = () => {
             onClick={handleLogin(injected)}
           >
             MetaMask
-          </StyledButton>
+          </Button>
 
-          <StyledButton
+          <Button
             type="text"
             size="large"
             icon={
@@ -116,7 +117,7 @@ export const LoginContainer = () => {
             onClick={handleLogin(walletconnect)}
           >
             WalletConnect
-          </StyledButton>
+          </Button>
         </WalletList>
       </Spin>
     </PageCard>
@@ -130,21 +131,4 @@ const WalletList = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 2rem;
-`;
-
-const StyledButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border: 2px solid lightgray;
-  border-radius: 8px;
-  padding: 1rem;
-  width: 100%;
-  max-width: 10rem;
-
-  &:focus,
-  &:hover {
-    border-color: darkgray;
-  }
 `;
