@@ -1,47 +1,92 @@
-import { Button } from "antd";
+import { useWeb3React } from "@web3-react/core";
+import { Button, message, Spin } from "antd";
 import Image from "next/image";
+import { useState } from "react";
 import styled from "styled-components";
 
+import { injected, walletconnect } from "../../connectors";
+
+const MESSAGE = "I accept relaxxpls as god.";
+
+const SignMessage = () => {
+  const { library, account } = useWeb3React();
+
+  const handleSignMessage = async () => {
+    try {
+      const signature = await library.getSigner(account).signMessage(MESSAGE);
+      window.alert(`Success!\n\n${signature}`);
+    } catch (error) {
+      window.alert("Failure!" + (error.message ? `\n\n${error.message}` : ""));
+    }
+  };
+
+  if (!(library && account)) return null;
+
+  return <StyledButton onClick={handleSignMessage}>Sign Message</StyledButton>;
+};
+
 const LoginContainer = () => {
-  const metamaskClick = () => {};
+  const { connector, library, account, activate, deactivate, active } =
+    useWeb3React();
+
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = (connector) => async () => {
+    try {
+      setLoading(true);
+      await activate(connector, undefined, true);
+    } catch (error) {
+      message.error(error.message);
+      if (connector?.walletConnectProvider) {
+        // eslint-disable-next-line no-param-reassign
+        connector.walletConnectProvider = undefined;
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container>
       <h1>Choose your wallet</h1>
 
-      <WalletList>
-        <StyledButton
-          type="text"
-          size="large"
-          icon={
-            <Image
-              src="/images/metamask.svg"
-              height={24}
-              width={24}
-              alt="MetaMask logo"
-            />
-          }
-          onClick={metamaskClick}
-        >
-          MetaMask
-        </StyledButton>
+      <Spin spinning={loading}>
+        <WalletList>
+          <StyledButton
+            type="text"
+            size="large"
+            icon={
+              <Image
+                src="/images/metamask.svg"
+                height={24}
+                width={24}
+                alt="MetaMask logo"
+              />
+            }
+            onClick={handleLogin(injected)}
+          >
+            MetaMask
+          </StyledButton>
 
-        <StyledButton
-          type="text"
-          size="large"
-          icon={
-            <Image
-              src="/images/walletconnect.svg"
-              height={24}
-              width={24}
-              alt="MetaMask logo"
-            />
-          }
-          onClick={metamaskClick}
-        >
-          WalletConnect
-        </StyledButton>
-      </WalletList>
+          <StyledButton
+            type="text"
+            size="large"
+            icon={
+              <Image
+                src="/images/walletconnect.svg"
+                height={24}
+                width={24}
+                alt="MetaMask logo"
+              />
+            }
+            onClick={handleLogin(walletconnect)}
+          >
+            WalletConnect
+          </StyledButton>
+
+          <SignMessage />
+        </WalletList>
+      </Spin>
     </Container>
   );
 };
@@ -53,8 +98,11 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: auto;
-  height: 100vh;
+  gap: 1rem;
+  width: fit-content;
+  padding: 3rem 2rem;
+  border: 1px solid lightgrey;
+  border-radius: 8px;
 `;
 
 const WalletList = styled.div`
@@ -63,7 +111,6 @@ const WalletList = styled.div`
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  margin: 1rem;
 `;
 
 const StyledButton = styled(Button)`
