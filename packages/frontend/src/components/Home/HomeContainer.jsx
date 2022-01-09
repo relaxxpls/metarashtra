@@ -1,6 +1,7 @@
 import { useWeb3React } from "@web3-react/core";
 import Link from "next/link";
-import styled from "styled-components";
+
+import { PageCard } from "../shared/Page";
 
 import AccountDetails from "./AccountDetails";
 
@@ -9,19 +10,23 @@ const HomeContainer = () => {
 
   if (!active) {
     return (
-      <Container>
-        Kindly <Link href="/login">login</Link> via your favorite wallet
-      </Container>
+      <PageCard>
+        <h1>
+          Kindly <Link href="/login">login</Link> via your favorite wallet
+        </h1>
+      </PageCard>
     );
   }
 
-  return <AccountDetails />;
+  return (
+    <PageCard>
+      <h1>
+        Click <Link href="/game">here</Link> to play!
+      </h1>
+
+      <AccountDetails />
+    </PageCard>
+  );
 };
 
 export default HomeContainer;
-
-const Container = styled.h1`
-  a {
-    text-decoration: underline;
-  }
-`;

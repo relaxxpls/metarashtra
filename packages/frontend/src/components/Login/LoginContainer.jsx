@@ -5,6 +5,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { injected, walletconnect } from "../../connectors";
+import { PageCard } from "../shared/Page";
 
 const MESSAGE = "I accept relaxxpls as god.";
 
@@ -33,11 +34,10 @@ export const LoggedinContainer = () => {
   };
 
   return (
-    <Container>
-      <h1>Welcome {account}</h1>
-
+    <PageCard>
       <Spin spinning={loading}>
         <WalletList>
+          <h1>Welcome {account}</h1>
           <StyledButton type="primary" onClick={handleSignMessage}>
             Sign Message
           </StyledButton>
@@ -47,7 +47,7 @@ export const LoggedinContainer = () => {
           </StyledButton>
         </WalletList>
       </Spin>
-    </Container>
+    </PageCard>
   );
 };
 
@@ -72,11 +72,11 @@ export const LoginContainer = () => {
   };
 
   return (
-    <Container>
-      <h1>Choose your wallet</h1>
-
+    <PageCard>
       <Spin spinning={loading}>
         <WalletList>
+          <h1>Choose Your Wallet</h1>
+
           <StyledButton
             type="text"
             size="large"
@@ -110,31 +110,17 @@ export const LoginContainer = () => {
           </StyledButton>
         </WalletList>
       </Spin>
-    </Container>
+    </PageCard>
   );
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  width: fit-content;
-  padding: 3rem 2rem;
-  border: 1px solid lightgrey;
-  border-radius: 8px;
-  margin: 5rem auto;
-  height: fit-content;
-  background: #ffffff;
-`;
-
 const WalletList = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 1rem;
   justify-content: center;
   align-items: center;
+  margin: 0 2rem;
 `;
 
 const StyledButton = styled(Button)`
@@ -145,7 +131,7 @@ const StyledButton = styled(Button)`
   border: 2px solid lightgray;
   border-radius: 8px;
   padding: 1rem;
-  flex: 0 0 10rem;
+  width: 100%;
 
   &:focus,
   &:hover {
