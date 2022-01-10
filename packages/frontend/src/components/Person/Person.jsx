@@ -75,7 +75,7 @@ const getBackgroundPosition = (direction) => {
 const StyledPerson = styled.div`
   /* position: relative; */
   position: absolute;
-  background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/21542/svJacob-2.svg);
+  background-image: url(/images/sprite/svJacob-2.svg);
   width: 64px;
   height: 64px;
   margin: 64px auto;
