@@ -1,16 +1,14 @@
 {
-  "name": "color-nfts-dapp",
+  "name": "metarashtra",
   "version": "1.0.0",
   "description": "Color NFTs based on ERC721.",
   "author": {
     "name": "Laxman Desai",
     "email": "lolopaw24@gmail.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/relaxxpls/color-nfts.git"
-  },
+  "repository": "https://github.com/relaxxpls/metarashtra.git",
   "license": "MIT",
+  "private": true,
   "keywords": [
     "nfts",
     "workspaces",
@@ -22,13 +20,12 @@
     "react",
     "nextjs"
   ],
-  "private": true,
   "scripts": {
-    "dev": "yarn workspace @dapp/frontend dev",
-    "build": "yarn workspace @dapp/frontend build",
-    "start": "yarn workspace @dapp/frontend start",
-    "lint": "yarn workspace @dapp/frontend lint",
-    "ipfs": "yarn workspace @dapp/frontend ipfs"
+    "dev": "yarn workspace @metarashtra/frontend dev",
+    "build": "yarn workspace @metarashtra/frontend build",
+    "start": "yarn workspace @metarashtra/frontend start",
+    "lint": "yarn workspace @metarashtra/frontend lint",
+    "ipfs": "yarn workspace @metarashtra/frontend ipfs"
   },
   "workspaces": {
     "packages": [

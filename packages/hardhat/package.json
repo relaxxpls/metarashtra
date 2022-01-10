@@ -1,7 +1,10 @@
 {
-  "name": "@dapp/hardhat",
+  "name": "@metarashtra/hardhat",
   "version": "1.0.0",
+  "description": "Hardhat + Waffle smart contracts for Metarashtra",
+  "repository": "https://github.com/relaxxpls/metarashtra",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test --network hardhat",

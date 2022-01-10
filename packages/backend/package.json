@@ -1,0 +1,9 @@
+{
+  "name": "@metarashtra/backend",
+  "version": "1.0.0",
+  "description": "Express + SocketIO server for Metarashtra",
+  "main": "index.js",
+  "repository": "https://github.com/relaxxpls/metarashtra",
+  "license": "MIT",
+  "private": true
+}
