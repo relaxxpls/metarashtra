@@ -9,23 +9,13 @@
   "repository": "https://github.com/relaxxpls/metarashtra.git",
   "license": "MIT",
   "private": true,
-  "keywords": [
-    "nfts",
-    "workspaces",
-    "yarn",
-    "ethereum",
-    "smart-contracts",
-    "hardhat",
-    "solidity",
-    "react",
-    "nextjs"
-  ],
   "scripts": {
-    "dev": "yarn workspace @metarashtra/frontend dev",
-    "build": "yarn workspace @metarashtra/frontend build",
-    "start": "yarn workspace @metarashtra/frontend start",
-    "lint": "yarn workspace @metarashtra/frontend lint",
-    "ipfs": "yarn workspace @metarashtra/frontend ipfs"
+    "client:dev": "yarn workspace @metarashtra/frontend dev",
+    "client:build": "yarn workspace @metarashtra/frontend build",
+    "client:start": "yarn workspace @metarashtra/frontend start",
+    "client:lint": "yarn workspace @metarashtra/frontend lint",
+    "server:dev": "yarn workspace @metarashtra/backend dev",
+    "server:start": "yarn workspace @metarashtra/backend start"
   },
   "workspaces": {
     "packages": [
