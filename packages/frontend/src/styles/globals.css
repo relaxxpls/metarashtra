@@ -25,13 +25,14 @@ code {
 }
 
 #__next {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: #eef1f4;
   height: 100%;
+  width: 100%;
   gap: 1rem;
+  color: #11253e;
 }
 
 a:hover {
