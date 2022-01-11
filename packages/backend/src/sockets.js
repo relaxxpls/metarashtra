@@ -1,11 +1,17 @@
-import socketio from "socket.io";
+import { Server } from 'socket.io';
 
-export default (server) => {
-  const io = socketio.listen(server, { ...options });
+import { logger } from './config';
 
-  io.on("connection", (socket) => {
-    logger.info("Client Connected");
+const attachSockets = (httpServer) => {
+  const io = new Server(httpServer);
+
+  io.on('connection', (socket) => {
+    logger.info('New user connected', { socket: socket.id });
+
+    socket.on('disconnect', () => {
+      logger.info('User disconnected', { socket: socket.id });
+    });
   });
-
-  return io;
 };
+
+export default attachSockets;
