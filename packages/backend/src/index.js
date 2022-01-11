@@ -11,8 +11,6 @@ import attachSockets from './sockets';
 dotenv.config();
 
 const app = express();
-const httpServer = http.createServer(app);
-attachSockets(httpServer);
 
 // ? Logging middleware
 app.use(successHandler);
@@ -26,9 +24,17 @@ app.options('*', cors());
 app.use(passport.initialize());
 // passport.use('jwt', jwtStrategy);
 
-// ? Start the server
-httpServer.listen(process.env.PORT, () => {
-  logger.info(
-    `Server running at ${process.env.PORT} in ${process.env.NODE_ENV}`
-  );
+// ? Start api server
+const APIPort = process.env.API_PORT || 8000;
+app.listen(APIPort, () => {
+  logger.info(`API server listening on port ${APIPort}.`);
+});
+
+// ? Start the websocket server
+const httpServer = http.createServer(app);
+attachSockets(httpServer);
+
+const SocketPort = process.env.SOCKET_PORT || 8080;
+httpServer.listen(SocketPort, () => {
+  logger.info(`WebSocket server listening on port ${SocketPort}.`);
 });
