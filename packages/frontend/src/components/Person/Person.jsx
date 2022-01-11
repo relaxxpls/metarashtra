@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-const directions = ["left", "down", "up", "right"];
+const directions = ['left', 'down', 'up', 'right'];
 const getRandomPosition = () => ({
   x: Math.floor(Math.random() * 600 + 1),
   y: Math.floor(Math.random() * 600 + 1),
 });
 
 const mapKeyToMove = {
-  ArrowUp: { dx: 0, dy: -20, direction: "up" },
-  ArrowDown: { dx: 0, dy: 20, direction: "down" },
-  ArrowLeft: { dx: -20, dy: 0, direction: "left" },
-  ArrowRight: { dx: 20, dy: 0, direction: "right" },
-  w: { dx: 0, dy: -20, direction: "up" },
-  s: { dx: 0, dy: 20, direction: "down" },
-  a: { dx: -20, dy: 0, direction: "left" },
-  d: { dx: 20, dy: 0, direction: "right" },
+  ArrowUp: { dx: 0, dy: -20, direction: 'up' },
+  ArrowDown: { dx: 0, dy: 20, direction: 'down' },
+  ArrowLeft: { dx: -20, dy: 0, direction: 'left' },
+  ArrowRight: { dx: 20, dy: 0, direction: 'right' },
+  w: { dx: 0, dy: -20, direction: 'up' },
+  s: { dx: 0, dy: 20, direction: 'down' },
+  a: { dx: -20, dy: 0, direction: 'left' },
+  d: { dx: 20, dy: 0, direction: 'right' },
 };
 
 const Person = ({
@@ -29,7 +29,7 @@ const Person = ({
 
   // ? Event Listener: Key Presses
   useEffect(() => {
-    if (!isPlayer) return;
+    if (!isPlayer) return () => {};
 
     const handleKeyDown = (event) => {
       const move = mapKeyToMove[event.key];
@@ -42,9 +42,11 @@ const Person = ({
       setDirection(move.direction);
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isPlayer]);
 
   return (
@@ -59,16 +61,16 @@ export default Person;
 
 const getBackgroundPosition = (direction) => {
   switch (direction) {
-    case "left":
-      return "0px 0px";
-    case "up":
-      return "64px 0px";
-    case "right":
-      return "128px 0px";
-    case "down":
-      return "192px 0px";
+    case 'left':
+      return '0px 0px';
+    case 'up':
+      return '64px 0px';
+    case 'right':
+      return '128px 0px';
+    case 'down':
+      return '192px 0px';
     default:
-      return "0px 0px";
+      return '0px 0px';
   }
 };
 
