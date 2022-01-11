@@ -9,7 +9,7 @@ module.exports = {
     },
   },
 
-  extends: ['next/core-web-vitals'],
+  extends: ['@metarashtra/eslint-config', 'next/core-web-vitals'],
 
   ignorePatterns: ['build/*'],
 

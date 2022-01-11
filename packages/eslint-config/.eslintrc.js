@@ -7,14 +7,14 @@ module.exports = {
 
   parserOptions: {
     ecmaFeatures: {
-      jsx: true,
+      impliedStrict: true,
     },
     sourceType: 'module',
   },
 
   extends: [
     'plugin:security/recommended',
-    // 'plugin:node/recommended',
+    'plugin:node/recommended',
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'airbnb',
