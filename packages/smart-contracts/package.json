@@ -1,5 +1,5 @@
 {
-  "name": "@metarashtra/hardhat",
+  "name": "@metarashtra/smart-contracts",
   "version": "1.0.0",
   "description": "Hardhat + Waffle smart contracts for Metarashtra",
   "repository": "https://github.com/relaxxpls/metarashtra",

@@ -1,12 +1,12 @@
-require("dotenv").config();
+require('dotenv').config();
 
-require("@nomiclabs/hardhat-etherscan");
-require("@nomiclabs/hardhat-waffle");
-require("hardhat-gas-reporter");
-require("solidity-coverage");
+require('@nomiclabs/hardhat-etherscan');
+require('@nomiclabs/hardhat-waffle');
+require('hardhat-gas-reporter');
+require('solidity-coverage');
 
 module.exports = {
-  solidity: "0.8.4",
+  solidity: '0.8.4',
 
   networks: {
     hardhat: {
@@ -21,7 +21,7 @@ module.exports = {
 
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
+    currency: 'USD',
   },
 
   etherscan: {
