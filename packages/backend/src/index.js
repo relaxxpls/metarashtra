@@ -1,13 +1,24 @@
 import cors from 'cors';
 import express from 'express';
+import passport from 'passport';
 
-// import routes from './routes';
+import { logger, successHandler, errorHandler } from './config';
 
 const app = express();
 
-app.use(cors());
-// app.use(routes);
+// ? Logging middleware
+app.use(successHandler);
+app.use(errorHandler);
 
-app.listen(8080, () => {
-  console.log('Server running');
+// ? Enable CORS
+app.use(cors());
+app.options('*', cors());
+
+// ? JWT authentication
+app.use(passport.initialize());
+// passport.use('jwt', jwtStrategy);
+
+// ? Start the server
+app.listen(process.env.PORT, () => {
+  logger.info('Server running');
 });

@@ -7,8 +7,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/app.js",
-    "start": "node src/app.js"
+    "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node src",
+    "start": "node --experimental-modules --es-module-specifier-resolution=node src"
   },
   "dependencies": {
     "cors": "^2.8.5",
