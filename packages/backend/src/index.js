@@ -1,8 +1,11 @@
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
 import passport from 'passport';
 
 import { logger, successHandler, errorHandler } from './config';
+
+dotenv.config();
 
 const app = express();
 
@@ -20,5 +23,5 @@ app.use(passport.initialize());
 
 // ? Start the server
 app.listen(process.env.PORT, () => {
-  logger.info('Server running');
+  logger.info(`Server running at ${process.env.PORT}`);
 });

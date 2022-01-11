@@ -1,6 +1,9 @@
+import dotenv from 'dotenv';
 import morgan from 'morgan';
 
 import logger from './logger';
+
+dotenv.config();
 
 morgan.token('message', (req, res) => res.locals.errorMessage || '');
 
