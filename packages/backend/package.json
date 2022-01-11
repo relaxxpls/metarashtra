@@ -20,7 +20,7 @@
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "socket.io": "^4.4.1",
-    "winston": "^3.3.4"
+    "winston": "^3.4.0"
   },
   "devDependencies": {
     "@metarashtra/eslint-config": "^1.0.0",

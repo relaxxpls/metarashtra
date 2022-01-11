@@ -18,6 +18,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'airbnb',
+    'airbnb/hooks',
     'prettier',
   ],
 
