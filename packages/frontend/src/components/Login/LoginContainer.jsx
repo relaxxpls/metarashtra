@@ -1,15 +1,15 @@
-import { useWeb3React } from "@web3-react/core";
-import { message, Spin } from "antd";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import styled from "styled-components";
+import { useWeb3React } from '@web3-react/core';
+import { message, Spin } from 'antd';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import styled from 'styled-components';
 
-import { injected, walletconnect } from "../../connectors";
-import Button from "../shared/Button";
-import { PageCard } from "../shared/Page";
+import { injected, walletconnect } from '../../connectors';
+import Button from '../shared/Button';
+import { PageCard } from '../shared/Page';
 
-const MESSAGE = "I accept relaxxpls as god.";
+const MESSAGE = 'I accept relaxxpls as god.';
 
 export const LoggedinContainer = () => {
   const { account, deactivate, library } = useWeb3React();
@@ -23,7 +23,7 @@ export const LoggedinContainer = () => {
       setLoading(true);
       const signature = await library.getSigner(account).signMessage(MESSAGE);
       console.log(signature);
-      message.success("Success on the signature!");
+      message.success('Success on the signature!');
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -33,12 +33,12 @@ export const LoggedinContainer = () => {
 
   const handleDeactivate = () => {
     deactivate();
-    message.success("Logged out succesfully");
+    message.success('Logged out succesfully');
   };
 
   const handlePlayRedirect = () => {
-    message.success("Redirecting to the game...");
-    router.push("/play");
+    message.success('Redirecting to the game...');
+    router.push('/play');
   };
 
   return (

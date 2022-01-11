@@ -1,9 +1,9 @@
-import { useWeb3React } from "@web3-react/core";
-import Link from "next/link";
+import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
 
-import { PageCard } from "../shared/Page";
+import { PageCard } from '../shared/Page';
 
-import AccountDetails from "./AccountDetails";
+import AccountDetails from './AccountDetails';
 
 const HomeContainer = () => {
   const { active } = useWeb3React();

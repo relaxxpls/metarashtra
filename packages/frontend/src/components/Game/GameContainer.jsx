@@ -1,15 +1,15 @@
-import { message } from "antd";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import { message } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
-import Person from "../Person/Person";
+import Person from '../Person/Person';
 
-import GameFooter from "./GameFooter";
-import GameOverlay from "./GameOverlay";
+import GameFooter from './GameFooter';
+import GameOverlay from './GameOverlay';
 
 const drawRoom = (ctx) => {
   const terrainImage = new Image();
-  terrainImage.src = "/images/terrain/base.jpg";
+  terrainImage.src = '/images/terrain/base.jpg';
   terrainImage.onload = () => ctx.drawImage(terrainImage, 0, 0);
 
   // const houseImage = new Image();
@@ -30,7 +30,7 @@ const GameContainer = () => {
 
   useEffect(() => {
     const canvas = canvasRef?.current;
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext('2d');
 
     if (ctx && !isLost) {
       clearCanvas(ctx);

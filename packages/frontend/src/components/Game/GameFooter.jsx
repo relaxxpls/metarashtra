@@ -5,43 +5,41 @@ import {
   FaArrowLeft,
   FaStar,
   FaTrophy,
-} from "react-icons/fa";
-import styled from "styled-components";
+} from 'react-icons/fa';
+import styled from 'styled-components';
 
-import Button from "../shared/Button";
+import Button from '../shared/Button';
 
-const GameFooter = ({ score, highscore, isLost, countDown, startGame }) => {
-  return (
-    <Container>
-      <div className="score">
+const GameFooter = ({ score, highscore, isLost, countDown, startGame }) => (
+  <Container>
+    <div className="score">
+      <p>
+        <FaStar size="20" />
+        Score: {score}
+      </p>
+      <p>
+        <FaTrophy size="20" />
+        Highscore: {highscore > score ? highscore : score}
+      </p>
+    </div>
+
+    {!isLost && countDown > 0 ? (
+      <Button type="primary" onClick={startGame}>
+        {countDown === 4 ? 'Start Game' : countDown}
+      </Button>
+    ) : (
+      <div className="controls">
+        <p>How to Play?</p>
         <p>
-          <FaStar size="20" />
-          Score: {score}
-        </p>
-        <p>
-          <FaTrophy size="20" />
-          Highscore: {highscore > score ? highscore : score}
+          <FaArrowUp size="20" />
+          <FaArrowRight size="20" />
+          <FaArrowDown size="20" />
+          <FaArrowLeft size="20" />
         </p>
       </div>
-
-      {!isLost && countDown > 0 ? (
-        <Button type="primary" onClick={startGame}>
-          {countDown === 4 ? "Start Game" : countDown}
-        </Button>
-      ) : (
-        <div className="controls">
-          <p>How to Play?</p>
-          <p>
-            <FaArrowUp size="20" />
-            <FaArrowRight size="20" />
-            <FaArrowDown size="20" />
-            <FaArrowLeft size="20" />
-          </p>
-        </div>
-      )}
-    </Container>
-  );
-};
+    )}
+  </Container>
+);
 
 export default GameFooter;
 

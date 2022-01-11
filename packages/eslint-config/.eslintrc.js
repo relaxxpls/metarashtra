@@ -74,5 +74,15 @@ module.exports = {
         warnOnUnassignedImports: true,
       },
     ],
+    'node/no-missing-import': [
+      'error',
+      {
+        tryExtensions: ['.jsx', '.js', '.json', '.node'],
+      },
+    ],
+    'node/no-unsupported-features/es-syntax': [
+      'error',
+      { ignores: ['modules'] },
+    ],
   },
 };

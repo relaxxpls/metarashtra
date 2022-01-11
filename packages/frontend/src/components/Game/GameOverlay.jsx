@@ -1,13 +1,12 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import Button from "../shared/Button";
+import Button from '../shared/Button';
 
 // ? pause menu
-const GameOverlay = () => {
-  return (
-    <Container>
-      <p className="large">Game Over</p>
-      {/* <p className="final-score">
+const GameOverlay = () => (
+  <Container>
+    <p className="large">Game Over</p>
+    {/* <p className="final-score">
             {newHighscore ? `🎉 New Highscore 🎉` : `You scored: ${score}`}
           </p>
           {!running && isLost && (
@@ -16,16 +15,15 @@ const GameOverlay = () => {
             </button>
           )} */}
 
-      <Button
-        type="primary"
-        // onClick={startGame}
-      >
-        Restart Game
-        {/* {countDown === 4 ? "Restart Game" : countDown} */}
-      </Button>
-    </Container>
-  );
-};
+    <Button
+      type="primary"
+      // onClick={startGame}
+    >
+      Restart Game
+      {/* {countDown === 4 ? "Restart Game" : countDown} */}
+    </Button>
+  </Container>
+);
 
 export default GameOverlay;
 
