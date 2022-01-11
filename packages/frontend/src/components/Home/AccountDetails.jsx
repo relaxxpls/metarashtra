@@ -1,6 +1,6 @@
-import { useWeb3React } from "@web3-react/core";
-import { ethers } from "ethers";
-import { useState, useEffect } from "react";
+import { useWeb3React } from '@web3-react/core';
+import { ethers } from 'ethers';
+import { useState, useEffect } from 'react';
 
 const ChainId = () => {
   const { chainId } = useWeb3React();
@@ -11,7 +11,7 @@ const ChainId = () => {
       <span role="img" aria-label="chain">
         ⛓
       </span>
-      <span>{chainId ?? ""}</span>
+      <span>{chainId ?? ''}</span>
     </>
   );
 };
@@ -22,33 +22,34 @@ const BlockNumber = () => {
   const [blockNumber, setBlockNumber] = useState();
 
   useEffect(() => {
-    if (!!library) {
-      let stale = false;
+    if (!library) return () => {};
 
-      library
-        .getBlockNumber()
-        .then((blockNumber) => {
-          if (!stale) {
-            setBlockNumber(blockNumber);
-          }
-        })
-        .catch(() => {
-          if (!stale) {
-            setBlockNumber(null);
-          }
-        });
+    let stale = false;
 
-      const updateBlockNumber = (blockNumber) => {
-        setBlockNumber(blockNumber);
-      };
-      library.on("block", updateBlockNumber);
+    const getBlockNumber = async () => {
+      try {
+        const response = await library.getBlockNumber();
+        if (!stale) {
+          setBlockNumber(response);
+        }
+      } catch (e) {
+        if (!stale) {
+          setBlockNumber(null);
+        }
+      }
+    };
+    getBlockNumber();
 
-      return () => {
-        stale = true;
-        library.removeListener("block", updateBlockNumber);
-        setBlockNumber(undefined);
-      };
-    }
+    const updateBlockNumber = (_blockNumber) => {
+      setBlockNumber(_blockNumber);
+    };
+    library.on('block', updateBlockNumber);
+
+    return () => {
+      stale = true;
+      library.removeListener('block', updateBlockNumber);
+      setBlockNumber(undefined);
+    };
   }, [library, chainId]); // ensures refresh if referential identity of library doesn't change across chainIds
 
   return (
@@ -57,7 +58,7 @@ const BlockNumber = () => {
       <span role="img" aria-label="numbers">
         🔢
       </span>
-      <span>{blockNumber === null ? "Error" : blockNumber ?? ""}</span>
+      <span>{blockNumber === null ? 'Error' : blockNumber ?? ''}</span>
     </>
   );
 };
@@ -72,13 +73,11 @@ const Account = () => {
         🤖
       </span>
       <span>
-        {account === null
-          ? "-"
-          : account
+        {account
           ? `${account.substring(0, 6)}...${account.substring(
               account.length - 4
             )}`
-          : ""}
+          : ''}
       </span>
     </>
   );
@@ -88,28 +87,31 @@ const Balance = () => {
   const { account, library, chainId } = useWeb3React();
 
   const [balance, setBalance] = useState();
+
   useEffect(() => {
-    if (!!account && !!library) {
-      let stale = false;
+    if (!(account && library)) return () => {};
 
-      library
-        .getBalance(account)
-        .then((balance) => {
-          if (!stale) {
-            setBalance(balance);
-          }
-        })
-        .catch(() => {
-          if (!stale) {
-            setBalance(null);
-          }
-        });
+    let stale = false;
 
-      return () => {
-        stale = true;
-        setBalance(undefined);
-      };
-    }
+    const getBalance = async () => {
+      try {
+        const response = await library.getBalance(account);
+        if (!stale) {
+          setBalance(response);
+        }
+      } catch (e) {
+        if (!stale) {
+          setBalance(null);
+        }
+      }
+    };
+
+    getBalance();
+
+    return () => {
+      stale = true;
+      setBalance(undefined);
+    };
   }, [account, library, chainId]); // ensures refresh if referential identity of library doesn't change across chainIds
 
   return (
@@ -118,42 +120,27 @@ const Balance = () => {
       <span role="img" aria-label="gold">
         💰
       </span>
-      <span>
-        {balance === null
-          ? "Error"
-          : balance
-          ? `Ξ${ethers.utils.formatEther(balance)}`
-          : ""}
-      </span>
+      <span>{balance ? `Ξ${ethers.utils.formatEther(balance)}` : ''}</span>
     </>
   );
 };
 
-const AccountDetails = () => {
-  const { active, error } = useWeb3React();
-
-  return (
-    <>
-      <h1 style={{ margin: "1rem", textAlign: "right" }}>
-        {active ? "🟢" : error ? "🔴" : "🟠"}
-      </h1>
-      <h3
-        style={{
-          display: "grid",
-          gridGap: "1rem",
-          gridTemplateColumns: "1fr min-content 1fr",
-          maxWidth: "20rem",
-          lineHeight: "2rem",
-          margin: "auto",
-        }}
-      >
-        <ChainId />
-        <BlockNumber />
-        <Account />
-        <Balance />
-      </h3>
-    </>
-  );
-};
+const AccountDetails = () => (
+  <h3
+    style={{
+      display: 'grid',
+      gridGap: '1rem',
+      gridTemplateColumns: '1fr min-content 1fr',
+      maxWidth: '20rem',
+      lineHeight: '2rem',
+      margin: 'auto',
+    }}
+  >
+    <ChainId />
+    <BlockNumber />
+    <Account />
+    <Balance />
+  </h3>
+);
 
 export default AccountDetails;

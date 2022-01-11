@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useWeb3React } from "@web3-react/core";
-import { useState, useEffect } from "react";
+import { useWeb3React } from '@web3-react/core';
+import { useState, useEffect } from 'react';
 
-import { injected } from "../connectors";
+import { injected } from '../connectors';
 
 const useEagerConnect = () => {
   const { activate, active } = useWeb3React();
@@ -10,7 +9,9 @@ const useEagerConnect = () => {
   const [tried, setTried] = useState(false);
 
   useEffect(() => {
-    injected.isAuthorized().then((isAuthorized) => {
+    const activateAsync = async () => {
+      const isAuthorized = await injected.isAuthorized();
+
       if (isAuthorized) {
         activate(injected, undefined, true).catch(() => {
           setTried(true);
@@ -18,8 +19,10 @@ const useEagerConnect = () => {
       } else {
         setTried(true);
       }
-    });
-  }, []); // intentionally only running on mount (make sure it's only mounted once :))
+    };
+
+    activateAsync();
+  }, [activate]);
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {

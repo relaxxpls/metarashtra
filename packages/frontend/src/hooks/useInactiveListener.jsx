@@ -1,14 +1,15 @@
 /* eslint-disable no-console */
-import { useWeb3React } from "@web3-react/core";
-import { useEffect } from "react";
+import { useWeb3React } from '@web3-react/core';
+import { useEffect } from 'react';
 
-import { injected } from "../connectors";
+import { injected } from '../connectors';
 
 const useInactiveListener = (suppress = false) => {
   const { active, error, activate } = useWeb3React();
 
   useEffect(() => {
     const { ethereum } = window;
+
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleConnect = () => {
         console.log("Handling 'connect' event");
@@ -29,20 +30,22 @@ const useInactiveListener = (suppress = false) => {
         activate(injected);
       };
 
-      ethereum.on("connect", handleConnect);
-      ethereum.on("chainChanged", handleChainChanged);
-      ethereum.on("accountsChanged", handleAccountsChanged);
-      ethereum.on("networkChanged", handleNetworkChanged);
+      ethereum.on('connect', handleConnect);
+      ethereum.on('chainChanged', handleChainChanged);
+      ethereum.on('accountsChanged', handleAccountsChanged);
+      ethereum.on('networkChanged', handleNetworkChanged);
 
       return () => {
         if (ethereum.removeListener) {
-          ethereum.removeListener("connect", handleConnect);
-          ethereum.removeListener("chainChanged", handleChainChanged);
-          ethereum.removeListener("accountsChanged", handleAccountsChanged);
-          ethereum.removeListener("networkChanged", handleNetworkChanged);
+          ethereum.removeListener('connect', handleConnect);
+          ethereum.removeListener('chainChanged', handleChainChanged);
+          ethereum.removeListener('accountsChanged', handleAccountsChanged);
+          ethereum.removeListener('networkChanged', handleNetworkChanged);
         }
       };
     }
+
+    return () => {};
   }, [active, error, suppress, activate]);
 };
 
