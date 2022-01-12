@@ -44,6 +44,8 @@ const GameFooter = ({ score, highscore, isLost, countDown, startGame }) => (
 export default GameFooter;
 
 const Container = styled.section`
+  position: absolute;
+  z-index: 3;
   padding: 0 18px 2px 18px;
   height: 66px;
   display: flex;
