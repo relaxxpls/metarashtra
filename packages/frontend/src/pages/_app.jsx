@@ -1,9 +1,9 @@
-import { ApolloProvider } from "@apollo/client";
-import { Web3ReactProvider } from "@web3-react/core";
-import { ethers } from "ethers";
+import { ApolloProvider } from '@apollo/client';
+import { Web3ReactProvider } from '@web3-react/core';
+import { ethers } from 'ethers';
 
-import client from "../apollo-client";
-import "../styles/globals.css";
+import client from '../apollo-client';
+import '../styles/globals.css';
 
 const getLibrary = (provider) => {
   const library = new ethers.providers.Web3Provider(provider);

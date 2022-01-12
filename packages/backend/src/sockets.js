@@ -11,17 +11,17 @@ import {
   makeMove,
 } from './services/user.service';
 
-const attachSockets = (httpServer) => {
+const attachSockets = async (httpServer) => {
   const io = new Server(httpServer);
 
   const pubClient = createClient({ url: process.env.REDIS_URL });
   const subClient = pubClient.duplicate();
+  await pubClient.connect();
+  await subClient.connect();
 
   io.adapter(createAdapter(pubClient, subClient));
 
   io.on('connection', (socket) => {
-    logger.info('New user connected', { socket: socket.id });
-
     socket.on('join', (payload) => {
       const numberOfUsersInRoom = getUsersInRoom(payload.room).length;
       if (numberOfUsersInRoom >= 10) logger.error('Too many participants');
@@ -40,6 +40,8 @@ const attachSockets = (httpServer) => {
       });
 
       socket.emit('currentUserState', newUser);
+
+      logger.info(`[Socket ${socket.id}] ${newUser.name} joined`);
     });
 
     socket.on('move', (move) => {
@@ -64,10 +66,11 @@ const attachSockets = (httpServer) => {
           room: user.room,
           users: getUsersInRoom(user.room),
         });
-        logger.info('User disconnected', { socket: socket.id });
+
+        logger.info(`[Socket ${socket.id}] ${user.name} left`);
       }
 
-      logger.info('User not in room', { socket: socket.id });
+      logger.info(`[Socket ${socket.id}] Disconnected`);
     });
   });
 };

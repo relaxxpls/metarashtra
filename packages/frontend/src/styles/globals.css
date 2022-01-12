@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap");
-@import "~antd/dist/antd.css";
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap');
+@import '~antd/dist/antd.css';
 
 *,
 *::after,
@@ -20,7 +20,7 @@
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
@@ -28,7 +28,7 @@ code {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #eef1f4;
+  background: #9fa7e4;
   height: 100%;
   width: 100%;
   gap: 1rem;
