@@ -1,4 +1,4 @@
-import { getRandomDirection, getRandomPosition } from '../utils';
+import { getRandomCoordinate, getRandomDirection } from '../utils';
 
 const users = [];
 
@@ -7,8 +7,11 @@ export const addUser = ({ id, name, room }) => {
     id,
     name,
     room,
-    position: getRandomPosition(),
-    direction: getRandomDirection(),
+    location: {
+      x: getRandomCoordinate(),
+      y: getRandomCoordinate(),
+      direction: getRandomDirection(),
+    },
   };
   users.push(newUser);
 
@@ -25,11 +28,14 @@ export const removeUser = (id) => {
   return null;
 };
 
-export const updateUser = (id, newUserState) => {
+export const makeMove = (id, move) => {
   const userIdx = users.findIndex((user) => user.id === id);
-  users[userIdx] = {
-    ...users[userIdx],
-    ...newUserState,
+  const currLocation = users[userIdx].location;
+
+  users[userIdx].location = {
+    x: currLocation.x + move.dx,
+    y: currLocation.y + move.dy,
+    direction: move.direction,
   };
 };
 

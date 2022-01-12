@@ -8,7 +8,7 @@ import {
   removeUser,
   getUser,
   getUsersInRoom,
-  updateUser,
+  makeMove,
 } from './services/user.service';
 
 const attachSockets = async (httpServer) => {
@@ -36,7 +36,7 @@ const attachSockets = async (httpServer) => {
 
       socket.join(newUser.room);
 
-      io.to(newUser.room).emit('roomState', {
+      io.to(newUser.room).emit('updateRoomState', {
         room: newUser.room,
         users: getUsersInRoom(newUser.room),
       });
@@ -44,13 +44,14 @@ const attachSockets = async (httpServer) => {
       socket.emit('currentUserState', newUser);
     });
 
-    socket.on('updateUserState', (newUserState) => {
+    socket.on('move', (move) => {
       const user = getUser(socket.id);
 
       if (user) {
-        updateUser(user.id, newUserState);
+        logger.info('User has made a move');
+        makeMove(user.id, move);
 
-        io.to(user.room).emit('updateGameState', {
+        io.to(user.room).emit('updateRoomState', {
           room: user.room,
           users: getUsersInRoom(user.room),
         });
@@ -61,7 +62,7 @@ const attachSockets = async (httpServer) => {
       const user = removeUser(socket.id);
 
       if (user) {
-        io.to(user.room).emit('roomState', {
+        io.to(user.room).emit('updateRoomState', {
           room: user.room,
           users: getUsersInRoom(user.room),
         });

@@ -9,6 +9,7 @@ module.exports = {
     ecmaFeatures: {
       impliedStrict: true,
     },
+    ecmaVersion: 2021,
     sourceType: 'module',
   },
 
