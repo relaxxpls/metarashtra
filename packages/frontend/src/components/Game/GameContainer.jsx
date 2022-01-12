@@ -1,42 +1,60 @@
 import { message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
 import Person from '../Person/Person';
 
 import GameFooter from './GameFooter';
-import GameOverlay from './GameOverlay';
 
-const drawRoom = (ctx) => {
-  const terrainImage = new Image();
-  terrainImage.src = '/images/terrain/base.jpg';
-  terrainImage.onload = () => ctx.drawImage(terrainImage, 0, 0);
+const room = 'default';
 
-  // const houseImage = new Image();
-  // houseImage.src = "/images/terrain/house.png";
-  // houseImage.onload = () => ctx.drawImage(houseImage, 80, 60);
-};
-
+// TODO: Make the game dynamic (i.e. based on the room name)
+// TODO: Add a "waiting for players" screen
+// TODO: Limit the number of players
 const GameContainer = () => {
   const canvasRef = useRef(null);
   const canvasWidth = 460;
   const canvasHeight = 460;
-  const canvasGridSize = 20;
 
-  const [isLost, setIsLost] = useState(false);
-
-  const clearCanvas = (ctx) =>
-    ctx.clearRect(-1, -1, canvasWidth + 2, canvasHeight + 2);
+  const [socket, setSocket] = useState(null);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef?.current;
     const ctx = canvas?.getContext('2d');
 
-    if (ctx && !isLost) {
-      clearCanvas(ctx);
-      drawRoom(ctx);
+    if (ctx) {
+      const terrainImage = new Image();
+      terrainImage.src = '/images/terrain/base.jpg';
+      terrainImage.onload = () => ctx.drawImage(terrainImage, 0, 0);
     }
-  }, [isLost]);
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io('http://localhost:8080', {
+      forceNew: true,
+      transports: ['websocket'],
+    });
+    setSocket(newSocket);
+
+    return () => newSocket.close();
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.emit('join', { room });
+
+    socket.on('updateRoomState', (payload) => {
+      setUsers(payload.users);
+    });
+
+    socket.on('disconnect', (reason) => {
+      message.error(reason);
+      setUsers([]);
+    });
+  }, [socket]);
 
   return (
     <main>
@@ -46,13 +64,16 @@ const GameContainer = () => {
         height={canvasHeight + 1}
       />
 
-      <Person isPlayer />
-      <Person />
-      <Person />
-      <Person />
+      {users.map((user) => (
+        <Person
+          key={user.id}
+          isPlayer={user.id === socket?.id}
+          socket={socket}
+          name={user.name}
+          location={user.location}
+        />
+      ))}
       <GameFooter />
-
-      {isLost && <GameOverlay />}
     </main>
   );
 };

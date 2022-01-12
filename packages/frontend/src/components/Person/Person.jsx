@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
-
-const directions = ['left', 'down', 'up', 'right'];
-const getRandomPosition = () => ({
-  x: Math.floor(Math.random() * 600 + 1),
-  y: Math.floor(Math.random() * 600 + 1),
-});
 
 const mapKeyToMove = {
   ArrowUp: { dx: 0, dy: -20, direction: 'up' },
@@ -18,14 +12,9 @@ const mapKeyToMove = {
   d: { dx: 20, dy: 0, direction: 'right' },
 };
 
-const Person = ({
-  isPlayer,
-  initialPosition = getRandomPosition(),
-  initialDirection = directions[Math.floor(Math.random() * directions.length)],
-  // personId,
-}) => {
-  const [position, setPosition] = useState(initialPosition);
-  const [direction, setDirection] = useState(initialDirection);
+const Person = ({ isPlayer, socket, name, location }) => {
+  // const [position, setPosition] = useState(initialPosition);
+  // const [direction, setDirection] = useState(initialDirection);
 
   // ? Event Listener: Key Presses
   useEffect(() => {
@@ -35,11 +24,7 @@ const Person = ({
       const move = mapKeyToMove[event.key];
       if (!move) return;
 
-      setPosition((prevPosition) => ({
-        x: prevPosition.x + move.dx,
-        y: prevPosition.y + move.dy,
-      }));
-      setDirection(move.direction);
+      socket.emit('move', move);
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -47,12 +32,12 @@ const Person = ({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isPlayer]);
+  }, [socket, isPlayer]);
 
   return (
     <StyledPerson
-      direction={direction}
-      style={{ left: `${position.x}px`, top: `${position.y}px` }}
+      direction={location.direction}
+      style={{ left: `${location.x}px`, top: `${location.y}px` }}
     />
   );
 };
