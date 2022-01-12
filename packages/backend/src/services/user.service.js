@@ -10,7 +10,7 @@ export const addUser = ({ id, name, room }) => {
     location: {
       x: getRandomCoordinate(),
       y: getRandomCoordinate(),
-      direction: getRandomDirection(),
+      facing: getRandomDirection(),
     },
   };
   users.push(newUser);
@@ -35,7 +35,7 @@ export const makeMove = (id, move) => {
   users[userIdx].location = {
     x: currLocation.x + move.dx,
     y: currLocation.y + move.dy,
-    direction: move.direction,
+    facing: move.facing,
   };
 };
 

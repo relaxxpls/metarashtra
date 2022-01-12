@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 const mapKeyToMove = {
-  ArrowUp: { dx: 0, dy: -20, direction: 'up' },
-  ArrowDown: { dx: 0, dy: 20, direction: 'down' },
-  ArrowLeft: { dx: -20, dy: 0, direction: 'left' },
-  ArrowRight: { dx: 20, dy: 0, direction: 'right' },
-  w: { dx: 0, dy: -20, direction: 'up' },
-  s: { dx: 0, dy: 20, direction: 'down' },
-  a: { dx: -20, dy: 0, direction: 'left' },
-  d: { dx: 20, dy: 0, direction: 'right' },
+  ArrowUp: { dx: 0, dy: -20, facing: 'up' },
+  ArrowDown: { dx: 0, dy: 20, facing: 'down' },
+  ArrowLeft: { dx: -20, dy: 0, facing: 'left' },
+  ArrowRight: { dx: 20, dy: 0, facing: 'right' },
+  w: { dx: 0, dy: -20, facing: 'up' },
+  s: { dx: 0, dy: 20, facing: 'down' },
+  a: { dx: -20, dy: 0, facing: 'left' },
+  d: { dx: 20, dy: 0, facing: 'right' },
 };
 
 const Person = ({ isPlayer, socket, name, location }) => {
@@ -32,44 +32,83 @@ const Person = ({ isPlayer, socket, name, location }) => {
   }, [socket, isPlayer]);
 
   return (
-    <StyledPerson
-      direction={location.direction}
+    <Character
+      facing={location.facing}
+      walking="true"
       style={{ left: `${location.x}px`, top: `${location.y}px` }}
-    />
+    >
+      <span className="name">{name}</span>
+      <div className="spritesheet" />
+      <div className="shadow" />
+    </Character>
   );
 };
 
 export default Person;
 
-const getBackgroundPosition = (direction) => {
-  switch (direction) {
-    case 'left':
-      return '0px 0px';
-    case 'up':
-      return '64px 0px';
-    case 'right':
-      return '128px 0px';
-    case 'down':
-      return '192px 0px';
-    default:
-      return '0px 0px';
-  }
+const backgroundPosition = {
+  right: 'calc( var(--pixel-size) * -32 )',
+  up: 'calc( var(--pixel-size) * -64 )',
+  left: 'calc( var(--pixel-size) * -96 )',
+  down: '0px',
 };
 
-const StyledPerson = styled.div`
-  /* position: relative; */
+const Character = styled.div`
+  width: calc(var(--grid-cell) * 2);
+  height: calc(var(--grid-cell) * 2);
   position: absolute;
-  background-image: url(/images/sprite/svJacob-2.svg);
-  width: 64px;
-  height: 64px;
-  margin: 64px auto;
-  background-size: 400%;
-  background-position: ${({ direction }) => getBackgroundPosition(direction)};
-  animation: move 0.5s steps(4, end) infinite;
+  overflow: hidden;
 
-  @keyframes move {
+  .name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    padding: 2px 10px;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: #ffffffcc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: Monospace;
+    font-weight: bold;
+    border-radius: 8px;
+    z-index: 2;
+  }
+
+  .shadow {
+    width: calc(var(--grid-cell) * 2);
+    height: calc(var(--grid-cell) * 2);
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: url('images/sprite/CharacterShadow.webp') no-repeat no-repeat;
+    background-size: 100%;
+  }
+
+  .spritesheet {
+    position: absolute;
+    background: url('images/sprite/Character.webp') no-repeat no-repeat;
+    background-size: 100%;
+    width: calc(var(--grid-cell) * 8);
+    height: calc(var(--grid-cell) * 8);
+    background-position-y: ${({ facing }) => backgroundPosition[facing]};
+
+    ${({ walking }) =>
+      walking &&
+      `
+    animation: walkAnimation 0.6s steps(4) infinite;
+      `}
+  }
+
+  @keyframes walkAnimation {
+    from {
+      transform: translate3d(0%, 0%, 0);
+    }
     to {
-      background-position-y: calc(16px * 16);
+      transform: translate3d(-100%, 0%, 0);
     }
   }
 `;
