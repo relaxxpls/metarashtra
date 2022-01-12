@@ -1,12 +1,18 @@
+import { getRandomDirection, getRandomPosition } from '../utils';
+
 const users = [];
 
 export const addUser = ({ id, name, room }) => {
-  const numberOfUsersInRoom = users.filter((user) => user.room === room).length;
-  if (numberOfUsersInRoom === 2) return { error: 'Room full' };
-
-  const newUser = { id, name, room };
+  const newUser = {
+    id,
+    name,
+    room,
+    position: getRandomPosition(),
+    direction: getRandomDirection(),
+  };
   users.push(newUser);
-  return { newUser };
+
+  return newUser;
 };
 
 export const removeUser = (id) => {
@@ -17,6 +23,14 @@ export const removeUser = (id) => {
   }
 
   return null;
+};
+
+export const updateUser = (id, newUserState) => {
+  const userIdx = users.findIndex((user) => user.id === id);
+  users[userIdx] = {
+    ...users[userIdx],
+    ...newUserState,
+  };
 };
 
 export const getUser = (id) => users.find((user) => user.id === id);

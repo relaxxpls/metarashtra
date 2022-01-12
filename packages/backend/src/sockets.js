@@ -8,6 +8,7 @@ import {
   removeUser,
   getUser,
   getUsersInRoom,
+  updateUser,
 } from './services/user.service';
 
 const attachSockets = async (httpServer) => {
@@ -23,41 +24,36 @@ const attachSockets = async (httpServer) => {
   io.on('connection', (socket) => {
     logger.info('New user connected', { socket: socket.id });
 
-    socket.on('join', (payload, callback) => {
+    socket.on('join', (payload) => {
       const numberOfUsersInRoom = getUsersInRoom(payload.room).length;
+      if (numberOfUsersInRoom >= 10) logger.error('Too many participants');
 
-      const { error, newUser } = addUser({
+      const newUser = addUser({
         id: socket.id,
         name: `Player ${numberOfUsersInRoom + 1}`,
         room: payload.room,
       });
 
-      if (error) return callback(error);
-
       socket.join(newUser.room);
 
-      io.to(newUser.room).emit('roomData', {
+      io.to(newUser.room).emit('roomState', {
         room: newUser.room,
         users: getUsersInRoom(newUser.room),
       });
-      socket.emit('currentUserData', { name: newUser.name });
 
-      return callback();
+      socket.emit('currentUserState', newUser);
     });
 
-    socket.on('initGameState', (gameState) => {
+    socket.on('updateUserState', (newUserState) => {
       const user = getUser(socket.id);
 
       if (user) {
-        io.to(user.room).emit('initGameState', gameState);
-      }
-    });
+        updateUser(user.id, newUserState);
 
-    socket.on('updateGameState', (gameState) => {
-      const user = getUser(socket.id);
-
-      if (user) {
-        io.to(user.room).emit('updateGameState', gameState);
+        io.to(user.room).emit('updateGameState', {
+          room: user.room,
+          users: getUsersInRoom(user.room),
+        });
       }
     });
 
@@ -65,7 +61,7 @@ const attachSockets = async (httpServer) => {
       const user = removeUser(socket.id);
 
       if (user) {
-        io.to(user.room).emit('roomData', {
+        io.to(user.room).emit('roomState', {
           room: user.room,
           users: getUsersInRoom(user.room),
         });
