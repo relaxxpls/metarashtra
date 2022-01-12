@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Person from '../Person/Person';
 
+import GameControls from './GameControls';
 import GameScore from './GameFooter';
 
 const room = 'default';
@@ -45,6 +46,7 @@ const GameContainer = () => {
     <Frame>
       <GameCorners />
       <GameScore />
+      <GameControls />
 
       <div className="camera">
         <div className="map">

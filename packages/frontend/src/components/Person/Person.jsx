@@ -58,6 +58,7 @@ const Character = styled.div`
   height: calc(var(--grid-cell) * 2);
   position: absolute;
   overflow: hidden;
+  z-index: 1;
 
   .name {
     display: flex;
@@ -67,15 +68,13 @@ const Character = styled.div`
     padding: 2px 10px;
     top: 0;
     left: 50%;
+    max-width: calc(var(--grid-cell) * 2);
     transform: translate(-50%, 50%);
     background: #ffffffcc;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     font-family: Monospace;
     font-weight: bold;
     border-radius: 8px;
-    z-index: 2;
   }
 
   .shadow {
