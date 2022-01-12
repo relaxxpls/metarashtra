@@ -11,13 +11,11 @@ import {
   makeMove,
 } from './services/user.service';
 
-const attachSockets = async (httpServer) => {
+const attachSockets = (httpServer) => {
   const io = new Server(httpServer);
 
   const pubClient = createClient({ url: process.env.REDIS_URL });
   const subClient = pubClient.duplicate();
-  await pubClient.connect();
-  await subClient.connect();
 
   io.adapter(createAdapter(pubClient, subClient));
 

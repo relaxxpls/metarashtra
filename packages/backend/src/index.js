@@ -11,14 +11,19 @@ import attachSockets from './sockets';
 dotenv.config();
 
 const app = express();
+const httpServer = http.createServer(app);
 
 // ? Logging middleware
 app.use(successHandler);
 app.use(errorHandler);
 
 // ? Enable CORS
-app.use(cors());
-app.options('*', cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  })
+);
 
 // ? JWT authentication
 app.use(passport.initialize());
@@ -31,7 +36,6 @@ app.listen(APIPort, () => {
 });
 
 // ? Start the websocket server
-const httpServer = http.createServer(app);
 attachSockets(httpServer);
 
 const SocketPort = process.env.SOCKET_PORT || 8080;

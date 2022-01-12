@@ -13,9 +13,6 @@ const mapKeyToMove = {
 };
 
 const Person = ({ isPlayer, socket, name, location }) => {
-  // const [position, setPosition] = useState(initialPosition);
-  // const [direction, setDirection] = useState(initialDirection);
-
   // ? Event Listener: Key Presses
   useEffect(() => {
     if (!isPlayer) return () => {};
