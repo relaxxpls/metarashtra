@@ -1,10 +1,10 @@
-import { useWeb3React } from "@web3-react/core";
-import Head from "next/head";
+import { useWeb3React } from '@web3-react/core';
+import Head from 'next/head';
 
 import {
   LoginContainer,
   LoggedinContainer,
-} from "../components/Login/LoginContainer";
+} from '../components/Login/LoginContainer';
 
 const Login = () => {
   const { active } = useWeb3React();

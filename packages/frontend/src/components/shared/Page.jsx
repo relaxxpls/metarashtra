@@ -6,5 +6,5 @@ export const PageCard = styled.div`
   padding: 3rem 2rem;
   border: 1px solid lightgrey;
   border-radius: 8px;
-  background: #ffffff;
+  background: #f5f5f5;
 `;

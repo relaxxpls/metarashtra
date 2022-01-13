@@ -70,7 +70,7 @@ const Character = styled.div`
     left: 50%;
     max-width: calc(var(--grid-cell) * 2);
     transform: translate(-50%, 50%);
-    background: #ffffffcc;
+    background: #f5f5f5cc;
     white-space: nowrap;
     font-family: Monospace;
     font-weight: bold;
