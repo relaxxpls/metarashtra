@@ -21,7 +21,7 @@ const HomeContainer = () => {
   return (
     <PageCard>
       <h1>
-        Click <Link href="/game">here</Link> to play!
+        Click <Link href="/play">here</Link> to play!
       </h1>
 
       <AccountDetails />

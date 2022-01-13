@@ -1,12 +1,22 @@
 import { FaEthereum, FaTrophy } from 'react-icons/fa';
+import { HiOutlinePause } from 'react-icons/hi';
 import styled from 'styled-components';
 
-const GameFooter = ({ score }) => (
+import Button from '../shared/Button';
+
+const GameFooter = ({ coins, score, handlePause }) => (
   <Container>
-    <div className="score">
+    <Button
+      icon={<HiOutlinePause size="30" />}
+      type="text"
+      onClick={handlePause}
+      style={{ border: 'none', padding: '0', width: 'initial' }}
+    />
+
+    <div>
       <p>
         <FaEthereum size="18" />
-        Coins: {score || 0}
+        Coins: {coins || 0}
       </p>
 
       <p>
@@ -22,10 +32,11 @@ export default GameFooter;
 const Container = styled.section`
   position: absolute;
   z-index: 3;
-  padding: 0.25rem 0.5rem;
+  padding: 0.375rem 0.75rem 0.375rem 0.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 1rem;
   box-sizing: border-box;
   background: #f5f5f5ee;
   border-bottom-right-radius: 8px;
@@ -37,7 +48,7 @@ const Container = styled.section`
     margin: 0;
     display: flex;
     align-items: center;
-    /* justify-content: center; */
+    justify-content: center;
     font-family: 'JetBrains Mono', monospace;
 
     &:not(:first-child) {
@@ -49,10 +60,6 @@ const Container = styled.section`
       width: 18px !important;
       text-align: center;
     }
-  }
-
-  .score {
-    padding: 0 0 2px 0;
   }
 
   .controls {
