@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "name": "Chola",
+    "image": "/images/kingdoms/cholas.jpeg",
+    "description": "Cholas is a nobleman of the kingdom of Metarashtra. He is a skilled warrior and a skilled archer.",
+    "stats": {
+      "strength": 5,
+      "agility": 8,
+      "intelligence": 7
+    }
+  },
+  {
+    "id": 2,
+    "name": "Maratha",
+    "image": "/images/kingdoms/marathas.jpeg",
+    "description": "Marathas is a nobleman of the kingdom of Metarashtra. He is a skilled warrior and a skilled archer.",
+    "stats": {
+      "strength": 7,
+      "agility": 6,
+      "intelligence": 7
+    }
+  },
+  {
+    "id": 3,
+    "name": "Maurya",
+    "image": "/images/kingdoms/mauryas.jpeg",
+    "description": "Mauryas is a nobleman of the kingdom of Metarashtra. He is a skilled warrior and a skilled archer.",
+    "stats": {
+      "strength": 6,
+      "agility": 5,
+      "intelligence": 9
+    }
+  },
+  {
+    "id": 4,
+    "name": "Mughal",
+    "image": "/images/kingdoms/mughals.jpeg",
+    "description": "Mughals is a nobleman of the kingdom of Metarashtra. He is a skilled warrior and a skilled archer.",
+    "stats": {
+      "strength": 9,
+      "agility": 7,
+      "intelligence": 4
+    }
+  },
+  {
+    "id": 5,
+    "name": "Vijayanagar",
+    "image": "/images/kingdoms/vijayanagars.jpeg",
+    "description": "Vijayanagars is a nobleman of the kingdom of Metarashtra. He is a skilled warrior and a skilled archer.",
+    "stats": {
+      "strength": 8,
+      "agility": 4,
+      "intelligence": 8,
+      "vitality": 10,
+      "luck": 10
+    }
+  }
+]

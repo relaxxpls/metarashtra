@@ -6,6 +6,7 @@ import express from 'express';
 import passport from 'passport';
 
 import { logger, successHandler, errorHandler } from './config';
+import routes from './routes';
 import attachSockets from './sockets';
 
 dotenv.config();
@@ -28,6 +29,10 @@ app.use(
 // ? JWT authentication
 app.use(passport.initialize());
 // passport.use('jwt', jwtStrategy);
+
+// TODO: send back a 404 error for any unknown api request
+// ? api routes
+app.use('/api/', routes);
 
 // ? Start api server
 const APIPort = process.env.API_PORT || 8000;

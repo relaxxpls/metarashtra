@@ -16,6 +16,7 @@ const StyledButton = styled(Button)`
 
     &:focus,
     &:hover {
+      background: #00000011;
       border-color: darkgray;
     }
   }
