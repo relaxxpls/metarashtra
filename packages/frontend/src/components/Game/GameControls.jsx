@@ -1,21 +1,21 @@
 import Image from 'next/image';
 import styled from 'styled-components';
 
-const GameControls = () => (
+const GameControls = ({ onClick: handleClick }) => (
   <Dpad>
-    <Button type="button" className="left">
-      <Image src="/images/dpad/left.svg" layout="fill" alt="Dpad Left Button" />
-    </Button>
-
-    <Button type="button" className="up">
+    <Button type="button" className="up" onClick={handleClick('up')}>
       <Image src="/images/dpad/up.svg" layout="fill" alt="Dpad Up Button" />
     </Button>
 
-    <Button type="button" className="down">
+    <Button type="button" className="down" onClick={handleClick('down')}>
       <Image src="/images/dpad/down.svg" layout="fill" alt="Dpad Down Button" />
     </Button>
 
-    <Button type="button" className="right">
+    <Button type="button" className="left" onClick={handleClick('left')}>
+      <Image src="/images/dpad/left.svg" layout="fill" alt="Dpad Left Button" />
+    </Button>
+
+    <Button type="button" className="right" onClick={handleClick('right')}>
       <Image
         src="/images/dpad/right.svg"
         layout="fill"
@@ -69,12 +69,9 @@ const Button = styled.div`
   }
 
   &:active {
-    .Arrow_arrow-inset {
-      stroke: #07c2cc;
-    }
-
-    .Arrow_arrow-body {
-      stroke: #17dfea;
+    img {
+      transform: scale(0.9);
+      transition: transform 0.1s ease-in-out;
     }
   }
 `;

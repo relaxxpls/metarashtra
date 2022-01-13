@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Person from '../Person/Person';
 
 import GameControls from './GameControls';
-import GameScore from './GameFooter';
+import GameScore from './GameScoreboard';
 
 const room = 'default';
 
