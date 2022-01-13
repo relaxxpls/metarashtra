@@ -1,29 +1,73 @@
 import Image from 'next/image';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
-const GameControls = ({ onClick: handleClick }) => (
-  <Dpad>
-    <Button type="button" className="up" onClick={handleClick('up')}>
-      <Image src="/images/dpad/up.svg" layout="fill" alt="Dpad Up Button" />
-    </Button>
+import useMoves from '../../hooks/useMoves';
 
-    <Button type="button" className="down" onClick={handleClick('down')}>
-      <Image src="/images/dpad/down.svg" layout="fill" alt="Dpad Down Button" />
-    </Button>
+const GameControls = ({ socket }) => {
+  const { moves, handleMoveCompleted, handlePressing, handleNotPressing } =
+    useMoves();
 
-    <Button type="button" className="left" onClick={handleClick('left')}>
-      <Image src="/images/dpad/left.svg" layout="fill" alt="Dpad Left Button" />
-    </Button>
+  useEffect(() => {
+    if (socket && moves.length) {
+      socket.emit('move', moves.shift());
+    }
+  }, [socket, moves, handleMoveCompleted]);
 
-    <Button type="button" className="right" onClick={handleClick('right')}>
-      <Image
-        src="/images/dpad/right.svg"
-        layout="fill"
-        alt="Dpad Right Button"
-      />
-    </Button>
-  </Dpad>
-);
+  return (
+    <Dpad>
+      <Button
+        type="button"
+        className="up"
+        onMouseDown={handlePressing('ArrowUp')}
+        onMouseUp={handleNotPressing()}
+        onTouchStart={handlePressing('ArrowUp')}
+        onTouchEnd={handleNotPressing()}
+      >
+        <Image
+          src="/images/dpad/up.svg"
+          layout="fill"
+          alt="Dpad Up Button"
+          draggable="false"
+        />
+      </Button>
+
+      <Button
+        type="button"
+        className="down"
+        onMouseDown={handlePressing('ArrowDown')}
+        onMouseUp={handleNotPressing()}
+        onTouchStart={handlePressing('ArrowDown')}
+        onTouchEnd={handleNotPressing()}
+      >
+        <Image
+          src="/images/dpad/down.svg"
+          layout="fill"
+          alt="Dpad Down Button"
+          draggable="false"
+        />
+      </Button>
+
+      <Button type="button" className="left">
+        <Image
+          src="/images/dpad/left.svg"
+          layout="fill"
+          alt="Dpad Left Button"
+          draggable="false"
+        />
+      </Button>
+
+      <Button type="button" className="right">
+        <Image
+          src="/images/dpad/right.svg"
+          layout="fill"
+          alt="Dpad Right Button"
+          draggable="false"
+        />
+      </Button>
+    </Dpad>
+  );
+};
 
 export default GameControls;
 
@@ -34,10 +78,9 @@ const Dpad = styled.div`
   width: calc(var(--pixel-size) * 37);
   height: calc(var(--pixel-size) * 38);
   z-index: 2;
-  user-select: none;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
   appearance: none;
   position: absolute;
   height: calc(var(--pixel-size) * 13);

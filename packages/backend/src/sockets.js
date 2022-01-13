@@ -47,14 +47,18 @@ const attachSockets = async (httpServer) => {
     socket.on('move', (move) => {
       const user = getUser(socket.id);
 
-      if (user) {
-        logger.info('User has made a move');
+      if (user && move) {
+        logger.info(`[Socket ${socket.id}] ${user?.name} made a move`);
         makeMove(user.id, move);
 
         io.to(user.room).emit('updateRoomState', {
           room: user.room,
           users: getUsersInRoom(user.room),
         });
+      } else {
+        logger.error(
+          `[Socket ${socket.id}] ${user?.name} made an invalid move`
+        );
       }
     });
 

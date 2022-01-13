@@ -1,6 +1,7 @@
+/* eslint-disable security/detect-object-injection */
 import styled from 'styled-components';
 
-const Person = ({ isPlayer, name, location }) => (
+const Person = ({ name, location }) => (
   <Character
     facing={location.facing}
     walking={location.walking}

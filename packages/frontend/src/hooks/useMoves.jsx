@@ -19,8 +19,10 @@ const useMoves = () => {
   const [moves, setMoves] = useState([]);
   const [pressed, setPressed] = useState(null);
 
-  const handleKeyDown = (event) => {
-    setMoves((_moves) => [..._moves, mapKeyToMove[event.key]]);
+  const handleKeyDown = ({ key }) => {
+    if (mapKeyToMove[key]) {
+      setMoves((_moves) => [..._moves, mapKeyToMove[key]]);
+    }
   };
 
   useInterval(
@@ -55,7 +57,6 @@ const useMoves = () => {
     handlePressing,
     handleNotPressing,
     handleMoveCompleted,
-    handleKeyDown,
   };
 };
 
