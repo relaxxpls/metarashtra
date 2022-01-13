@@ -1,48 +1,16 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 
-const mapKeyToMove = {
-  ArrowUp: { dx: 0, dy: -20, facing: 'up' },
-  ArrowDown: { dx: 0, dy: 20, facing: 'down' },
-  ArrowLeft: { dx: -20, dy: 0, facing: 'left' },
-  ArrowRight: { dx: 20, dy: 0, facing: 'right' },
-  w: { dx: 0, dy: -20, facing: 'up' },
-  s: { dx: 0, dy: 20, facing: 'down' },
-  a: { dx: -20, dy: 0, facing: 'left' },
-  d: { dx: 20, dy: 0, facing: 'right' },
-};
-
-const Person = ({ isPlayer, socket, name, location }) => {
-  // ? Event Listener: Key Presses
-  useEffect(() => {
-    if (!isPlayer) return () => {};
-
-    const handleKeyDown = (event) => {
-      const move = mapKeyToMove[event.key];
-      if (!move) return;
-
-      socket.emit('move', move);
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [socket, isPlayer]);
-
-  return (
-    <Character
-      facing={location.facing}
-      walking="true"
-      style={{ left: `${location.x}px`, top: `${location.y}px` }}
-    >
-      <span className="name">{name}</span>
-      <div className="spritesheet" />
-      <div className="shadow" />
-    </Character>
-  );
-};
+const Person = ({ isPlayer, name, location }) => (
+  <Character
+    facing={location.facing}
+    walking={location.walking}
+    style={{ left: `${location.x}px`, top: `${location.y}px` }}
+  >
+    <span className="name">{name}</span>
+    <div className="spritesheet" />
+    <div className="shadow" />
+  </Character>
+);
 
 export default Person;
 

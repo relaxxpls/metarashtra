@@ -1,6 +1,8 @@
 /* eslint-disable security/detect-object-injection */
 import { useEffect, useState } from 'react';
 
+import useInterval from './useInterval';
+
 export const mapKeyToMove = {
   ArrowUp: { dx: 0, dy: -20, facing: 'up' },
   ArrowDown: { dx: 0, dy: 20, facing: 'down' },
@@ -15,23 +17,25 @@ export const mapKeyToMove = {
 // ? Event Listener for keydown & keyup
 const useMoves = () => {
   const [moves, setMoves] = useState([]);
+  const [pressed, setPressed] = useState(null);
 
   const handleKeyDown = (event) => {
     setMoves((_moves) => [..._moves, mapKeyToMove[event.key]]);
   };
 
-  const handleKeyUp = () => {
-    // setMoves((moves) => moves.shift());
-  };
+  useInterval(
+    () => pressed && setMoves((_moves) => [..._moves, mapKeyToMove[pressed]]),
+    60
+  );
 
   const handlePressing = (key) => (event) => {
     event.preventDefault();
-    setMoves([mapKeyToMove[key]]);
+    setPressed(key);
   };
 
   const handleNotPressing = () => (event) => {
     event.preventDefault();
-    setMoves([]);
+    setPressed(null);
   };
 
   const handleMoveCompleted = () => {
@@ -40,15 +44,19 @@ const useMoves = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
 
-  return { moves, handlePressing, handleNotPressing, handleMoveCompleted };
+  return {
+    moves,
+    handlePressing,
+    handleNotPressing,
+    handleMoveCompleted,
+    handleKeyDown,
+  };
 };
 
 export default useMoves;
