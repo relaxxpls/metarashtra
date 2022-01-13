@@ -23,6 +23,7 @@ const GameContainer = () => {
   const [status, setStatus] = useState({
     isDisconnected: false,
     isPaused: false,
+    loading: true,
   });
 
   const handleJoin = () => {
@@ -42,6 +43,9 @@ const GameContainer = () => {
 
   useEffect(() => {
     if (!socket) return;
+    socket.on('connect', () => {
+      setStatus((_status) => ({ ..._status, loading: false }));
+    });
 
     socket.emit('join', { room });
 
@@ -53,10 +57,7 @@ const GameContainer = () => {
       message.error(reason);
       setUsers([]);
       setSocket(null);
-      setStatus((_status) => ({
-        ..._status,
-        isDisconnected: true,
-      }));
+      setStatus((_status) => ({ ..._status, isDisconnected: true }));
     });
   }, [socket]);
 
@@ -81,7 +82,7 @@ const GameContainer = () => {
     router.push('/');
   };
 
-  const paused = status.isPaused || status.isDisconnected;
+  const paused = status.isPaused || status.isDisconnected || status.loading;
 
   return (
     <>
@@ -106,23 +107,27 @@ const GameContainer = () => {
 
       {paused && (
         <PageCard style={{ position: 'absolute' }}>
-          {status.isConnecting && <Spin style={{ display: 'flex' }} />}
-
-          {status.isDisconnected ? (
-            <Button type="primary" onClick={handleRejoin}>
-              Rejoin
-            </Button>
+          {status.loading ? (
+            <Spin style={{ display: 'flex' }} />
           ) : (
-            <Button type="primary" onClick={handleContinue}>
-              Continue
-            </Button>
+            <>
+              {status.isDisconnected ? (
+                <Button type="primary" onClick={handleRejoin}>
+                  Rejoin
+                </Button>
+              ) : (
+                <Button type="primary" onClick={handleContinue}>
+                  Continue
+                </Button>
+              )}
+
+              <Button>Settings</Button>
+
+              <Button type="primary" danger onClick={handleExit}>
+                Exit
+              </Button>
+            </>
           )}
-
-          <Button>Settings</Button>
-
-          <Button type="primary" danger onClick={handleExit}>
-            Exit
-          </Button>
         </PageCard>
       )}
     </>

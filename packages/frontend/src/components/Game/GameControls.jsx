@@ -24,12 +24,14 @@ const GameControls = ({ socket }) => {
         onTouchStart={handlePressing('ArrowUp')}
         onTouchEnd={handleNotPressing()}
       >
-        <Image
-          src="/images/dpad/up.svg"
-          layout="fill"
-          alt="Dpad Up Button"
-          draggable="false"
-        />
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Image
+            src="/images/dpad/up.svg"
+            layout="fill"
+            alt="Dpad Up Button"
+            draggable="false"
+          />
+        </div>
       </Button>
 
       <Button
@@ -40,30 +42,50 @@ const GameControls = ({ socket }) => {
         onTouchStart={handlePressing('ArrowDown')}
         onTouchEnd={handleNotPressing()}
       >
-        <Image
-          src="/images/dpad/down.svg"
-          layout="fill"
-          alt="Dpad Down Button"
-          draggable="false"
-        />
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Image
+            src="/images/dpad/down.svg"
+            layout="fill"
+            alt="Dpad Down Button"
+            draggable="false"
+          />
+        </div>
       </Button>
 
-      <Button type="button" className="left">
-        <Image
-          src="/images/dpad/left.svg"
-          layout="fill"
-          alt="Dpad Left Button"
-          draggable="false"
-        />
+      <Button
+        type="button"
+        className="left"
+        onMouseDown={handlePressing('ArrowLeft')}
+        onMouseUp={handleNotPressing()}
+        onTouchStart={handlePressing('ArrowLeft')}
+        onTouchEnd={handleNotPressing()}
+      >
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Image
+            src="/images/dpad/left.svg"
+            layout="fill"
+            alt="Dpad Left Button"
+            draggable="false"
+          />
+        </div>
       </Button>
 
-      <Button type="button" className="right">
-        <Image
-          src="/images/dpad/right.svg"
-          layout="fill"
-          alt="Dpad Right Button"
-          draggable="false"
-        />
+      <Button
+        type="button"
+        className="right"
+        onMouseDown={handlePressing('ArrowRight')}
+        onMouseUp={handleNotPressing()}
+        onTouchStart={handlePressing('ArrowRight')}
+        onTouchEnd={handleNotPressing()}
+      >
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Image
+            src="/images/dpad/right.svg"
+            layout="fill"
+            alt="Dpad Right Button"
+            draggable="false"
+          />
+        </div>
       </Button>
     </Dpad>
   );
