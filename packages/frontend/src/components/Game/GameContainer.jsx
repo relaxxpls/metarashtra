@@ -34,11 +34,9 @@ const GameContainer = () => {
     setSocket(newSocket);
   };
 
+  // ? Join room on mount
   useEffect(() => {
     handleJoin();
-
-    return () => socket.close();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -135,6 +133,9 @@ const GameContainer = () => {
 };
 
 export default GameContainer;
+//  map.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${
+//    -y * pixelSize + camera_top
+//  }px, 0 )`;
 
 const GameCorners = () => (
   <Corner>
