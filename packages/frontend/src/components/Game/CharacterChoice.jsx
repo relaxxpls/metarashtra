@@ -2,8 +2,10 @@ import { message, Progress, Tooltip } from 'antd';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { HiOutlineInformationCircle } from 'react-icons/hi';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import profileState from '../../recoil/atoms/profile';
 import Button from '../shared/Button';
 
 const Character = ({ name, image, description, stats, handleChoice }) => (
@@ -46,6 +48,7 @@ const Character = ({ name, image, description, stats, handleChoice }) => (
 const CharacterChoice = () => {
   const [loading, setLoading] = useState(true);
   const [choices, setChoices] = useState([]);
+  const [profile, setProfile] = useRecoilState(profileState);
 
   useEffect(() => {
     const fetchChoices = async () => {
@@ -67,38 +70,52 @@ const CharacterChoice = () => {
   }, []);
 
   const handleCharacterChoice = (choice) => () => {
-    console.log(choice);
+    setProfile({ ...profile, nftId: choice });
   };
 
   if (loading) return null;
 
   return (
-    <CharacterList>
-      {choices.map(({ id, name, image, description, stats }) => (
-        <li key={id}>
-          <Character
-            name={name}
-            image={image}
-            description={description}
-            stats={stats}
-            handleChoice={handleCharacterChoice(id)}
-          />
-        </li>
-      ))}
-    </CharacterList>
+    <CharacterChoiceContainer>
+      <h1>Get started in 3 simple steps!</h1>
+      <h2>Step 3: Choose your character</h2>
+
+      <CharacterList>
+        {choices.map(({ id, name, image, description, stats }) => (
+          <li key={id}>
+            <Character
+              name={name}
+              image={image}
+              description={description}
+              stats={stats}
+              handleChoice={handleCharacterChoice(id)}
+            />
+          </li>
+        ))}
+      </CharacterList>
+    </CharacterChoiceContainer>
   );
 };
 
 export default CharacterChoice;
+
+const CharacterChoiceContainer = styled.div`
+  background: #ffffff55;
+  padding: 1rem;
+  border-radius: 8px;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+`;
 
 const CharacterList = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  background: #ffffff55;
-  padding: 1rem;
-  border-radius: 8px;
 `;
 
 const CharacterContainer = styled.button`
