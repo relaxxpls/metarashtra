@@ -51,7 +51,9 @@ const CharacterChoice = () => {
     const fetchChoices = async () => {
       try {
         setLoading(true);
-        const result = await fetch('/api/kingdoms');
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/kingdoms/available`
+        ).then((res) => res.json());
 
         setChoices(result);
       } catch (error) {

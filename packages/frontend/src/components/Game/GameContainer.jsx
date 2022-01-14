@@ -83,7 +83,13 @@ const GameContainer = () => {
   const paused = status.isPaused || status.isDisconnected || status.loading;
 
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Frame paused={paused}>
         <GameCorners />
         <GameScore handlePause={handlePause} />
@@ -128,7 +134,7 @@ const GameContainer = () => {
           )}
         </PageCard>
       )}
-    </>
+    </div>
   );
 };
 

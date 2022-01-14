@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import GameContainer from '../../components/Game/GameContainer';
+import GameContainer from '../../components/Game/Game';
 
 const Game = () => {
   const { active } = useWeb3React();
