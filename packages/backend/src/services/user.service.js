@@ -3,10 +3,10 @@ import { getRandomCoordinate, getRandomDirection } from '../utils';
 
 const users = [];
 
-export const addUser = ({ id, name, room }) => {
+export const addUser = ({ id, username, room }) => {
   const newUser = {
     id,
-    name,
+    username,
     room,
     location: {
       x: getRandomCoordinate(),

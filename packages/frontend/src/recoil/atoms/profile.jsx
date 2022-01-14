@@ -6,6 +6,8 @@ const profileState = atom({
     username: null,
     address: null,
     nftId: null,
+    coins: 1_000_000,
+    score: 0,
   },
 });
 

@@ -1,13 +1,13 @@
 /* eslint-disable security/detect-object-injection */
 import styled from 'styled-components';
 
-const Person = ({ name, location }) => (
+const Person = ({ username, location }) => (
   <Character
     facing={location.facing}
     walking={location.walking}
     style={{ left: `${location.x}px`, top: `${location.y}px` }}
   >
-    <span className="name">{name}</span>
+    <span className="name">{username}</span>
     <div className="spritesheet" />
     <div className="shadow" />
   </Character>

@@ -104,7 +104,7 @@ const GameContainer = () => {
               <Person
                 key={user.id}
                 isPlayer={user.id === socket?.id}
-                name={user.name}
+                username={user.username}
                 location={user.location}
               />
             ))}

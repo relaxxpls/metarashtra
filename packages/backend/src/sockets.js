@@ -28,8 +28,11 @@ const attachSockets = async (httpServer) => {
 
       const newUser = addUser({
         id: socket.id,
-        name: `Player ${numberOfUsersInRoom + 1}`,
+        username: payload.username,
         room: payload.room,
+        nftId: payload.nftId,
+        coins: payload.coins,
+        score: payload.score,
       });
 
       socket.join(newUser.room);
@@ -41,14 +44,14 @@ const attachSockets = async (httpServer) => {
 
       socket.emit('currentUserState', newUser);
 
-      logger.info(`[Socket ${socket.id}] ${newUser.name} joined`);
+      logger.info(`[Socket ${socket.id}] ${newUser.username} joined`);
     });
 
     socket.on('move', (move) => {
       const user = getUser(socket.id);
 
       if (user && move) {
-        logger.info(`[Socket ${socket.id}] ${user?.name} made a move`);
+        logger.info(`[Socket ${socket.id}] ${user?.username} made a move`);
         makeMove(user.id, move);
 
         io.to(user.room).emit('updateRoomState', {
@@ -57,7 +60,7 @@ const attachSockets = async (httpServer) => {
         });
       } else {
         logger.error(
-          `[Socket ${socket.id}] ${user?.name} made an invalid move`
+          `[Socket ${socket.id}] ${user?.username} made an invalid move`
         );
       }
     });
@@ -71,7 +74,7 @@ const attachSockets = async (httpServer) => {
           users: getUsersInRoom(user.room),
         });
 
-        logger.info(`[Socket ${socket.id}] ${user.name} left`);
+        logger.info(`[Socket ${socket.id}] ${user.username} left`);
       }
 
       logger.info(`[Socket ${socket.id}] Disconnected`);

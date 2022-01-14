@@ -1,31 +1,37 @@
 import { FaEthereum, FaTrophy } from 'react-icons/fa';
 import { HiOutlinePause } from 'react-icons/hi';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import profileState from '../../recoil/atoms/profile';
 import Button from '../shared/Button';
 
-const GameFooter = ({ coins, score, handlePause }) => (
-  <Container>
-    <Button
-      icon={<HiOutlinePause size="30" />}
-      type="text"
-      onClick={handlePause}
-      style={{ border: 'none', padding: '0', width: 'initial' }}
-    />
+const GameFooter = ({ handlePause }) => {
+  const profile = useRecoilValue(profileState);
 
-    <div>
-      <p>
-        <FaEthereum size="18" />
-        Coins: {coins || 0}
-      </p>
+  return (
+    <Container>
+      <Button
+        icon={<HiOutlinePause size="30" />}
+        type="text"
+        onClick={handlePause}
+        style={{ border: 'none', padding: '0', width: 'initial' }}
+      />
 
-      <p>
-        <FaTrophy size="14" />
-        Score: {score || 0}
-      </p>
-    </div>
-  </Container>
-);
+      <div>
+        <p>
+          <FaEthereum size="18" />
+          Coins: {profile.coins}
+        </p>
+
+        <p>
+          <FaTrophy size="14" />
+          Score: {profile.score}
+        </p>
+      </div>
+    </Container>
+  );
+};
 
 export default GameFooter;
 
