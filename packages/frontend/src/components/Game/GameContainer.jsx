@@ -1,9 +1,11 @@
 import { message, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
+import profileState from '../../recoil/atoms/profile';
 import Person from '../Person/Person';
 import Button from '../shared/Button';
 import { PageCard } from '../shared/Page';
@@ -25,6 +27,7 @@ const GameContainer = () => {
     isPaused: false,
     loading: true,
   });
+  const profile = useRecoilValue(profileState);
 
   const handleJoin = () => {
     const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
@@ -36,16 +39,16 @@ const GameContainer = () => {
 
   // ? Join room on mount
   useEffect(() => {
-    handleJoin();
-  }, []);
+    if (socket === null) handleJoin();
+  }, [socket]);
 
   useEffect(() => {
     if (!socket) return;
     socket.on('connect', () => {
       setStatus((_status) => ({ ..._status, loading: false }));
-    });
 
-    socket.emit('join', { room });
+      socket.emit('join', { ...profile, room });
+    });
 
     socket.on('updateRoomState', (payload) => {
       setUsers(payload.users);
@@ -57,7 +60,7 @@ const GameContainer = () => {
       setSocket(null);
       setStatus((_status) => ({ ..._status, isDisconnected: true }));
     });
-  }, [socket]);
+  }, [socket, profile]);
 
   const handleRejoin = () => {
     if (socket) socket.close();

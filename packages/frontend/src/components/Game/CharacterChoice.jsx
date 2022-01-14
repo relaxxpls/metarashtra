@@ -2,7 +2,7 @@ import { message, Progress, Tooltip } from 'antd';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { HiOutlineInformationCircle } from 'react-icons/hi';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import profileState from '../../recoil/atoms/profile';
@@ -48,7 +48,7 @@ const Character = ({ name, image, description, stats, handleChoice }) => (
 const CharacterChoice = () => {
   const [loading, setLoading] = useState(true);
   const [choices, setChoices] = useState([]);
-  const [profile, setProfile] = useRecoilState(profileState);
+  const setProfile = useSetRecoilState(profileState);
 
   useEffect(() => {
     const fetchChoices = async () => {
@@ -70,7 +70,7 @@ const CharacterChoice = () => {
   }, []);
 
   const handleCharacterChoice = (choice) => () => {
-    setProfile({ ...profile, nftId: choice });
+    setProfile((_profile) => ({ ..._profile, nftId: choice }));
   };
 
   if (loading) return null;

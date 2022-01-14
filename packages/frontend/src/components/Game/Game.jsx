@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
+
+import profileState from '../../recoil/atoms/profile';
 
 import CharacterChoice from './CharacterChoice';
 import GameContainer from './GameContainer';
 
 const Game = () => {
-  const [user, setUser] = useState(false);
+  const router = useRouter();
+  const profile = useRecoilValue(profileState);
+  if (!profile.username) router.push('/login');
 
-  return <div>{user ? <GameContainer /> : <CharacterChoice />}</div>;
+  return profile.nftId ? <GameContainer /> : <CharacterChoice />;
 };
 
 export default Game;
