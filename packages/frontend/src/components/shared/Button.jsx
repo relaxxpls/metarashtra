@@ -10,6 +10,7 @@ const StyledButton = styled(Button)`
   padding: 1rem;
   width: 100%;
   max-width: 10rem;
+  font-size: 0.75rem;
 
   &.ant-btn-text {
     border: 2px solid lightgray;

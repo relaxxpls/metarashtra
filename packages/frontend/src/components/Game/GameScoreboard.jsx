@@ -54,7 +54,6 @@ const Container = styled.section`
     margin: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
     font-family: 'JetBrains Mono', monospace;
 
     &:not(:first-child) {

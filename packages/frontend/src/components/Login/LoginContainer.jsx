@@ -34,7 +34,7 @@ export const LoggedinContainer = () => {
   const handleSignMessage = async () => {
     try {
       setLoading(true);
-      const signature = await library.getSigner(account).signMessage(MESSAGE);
+      await library.getSigner(account).signMessage(MESSAGE);
       message.success('Success on the signature!');
     } catch (error) {
       message.error(error.message);
