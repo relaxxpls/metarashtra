@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 require('dotenv').config();
 
 require('@nomiclabs/hardhat-etherscan');
