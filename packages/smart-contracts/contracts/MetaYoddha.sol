@@ -11,9 +11,9 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
   using Counters for Counters.Counter;
 
   Counters.Counter private _yoddhaTokenIds;
-  uint256 fee;
+  uint256 public fee;
 
-  mapping(uint256 => uint256) private _yoddhaLevel;
+  mapping(uint256 => uint256) private _yoddhaLevels;
 
   struct Yoddha {
     uint256 id;
@@ -26,37 +26,59 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
   event FeeUpdate(uint256 indexed fee);
 
   constructor() ERC721('MetaYoddha', 'YDH') {
-    // ? start yoddha token id count from 1 instead of 0
-    _yoddhaTokenIds.increment();
     updateFee(0.01 ether);
   }
 
   function mint(string memory tokenURI) public payable {
     require(msg.value >= fee);
 
+    // ? start yoddha token id count from 1 instead of 0
+    _yoddhaTokenIds.increment();
+
     uint256 newYoddhaTokenId = _yoddhaTokenIds.current();
     _mint(msg.sender, newYoddhaTokenId);
     _setTokenURI(newYoddhaTokenId, tokenURI);
-    _yoddhaLevel[newYoddhaTokenId] = 1;
+    _yoddhaLevels[newYoddhaTokenId] = 1;
 
     emit YoddhaBorn(msg.sender, newYoddhaTokenId, tokenURI);
-    _yoddhaTokenIds.increment();
   }
 
-  function getYoddhasByOwner(address _owner)
+  function yoddhaLevel(uint256 tokenId) public view returns (uint256) {
+    require(
+      _exists(tokenId),
+      'MetaYoddha: Level query for nonexistent tokenId'
+    );
+
+    return _yoddhaLevels[tokenId];
+  }
+
+  function getYoddhaById(uint256 tokenId)
+    external
+    view
+    returns (Yoddha memory)
+  {
+    require(
+      _exists(tokenId),
+      'MetaYoddha: Yoddha query for nonexistent tokenId'
+    );
+
+    return Yoddha(tokenId, tokenURI(tokenId), yoddhaLevel(tokenId));
+  }
+
+  function getYoddhasByOwner(address owner)
     external
     view
     returns (Yoddha[] memory)
   {
-    Yoddha[] memory result = new Yoddha[](balanceOf(_owner));
+    Yoddha[] memory result = new Yoddha[](balanceOf(owner));
     uint256 counter = 0;
 
     for (uint256 tokenId = 1; tokenId <= _yoddhaTokenIds.current(); tokenId++) {
-      if (ownerOf(tokenId) == _owner) {
+      if (ownerOf(tokenId) == owner) {
         result[counter] = Yoddha({
           id: tokenId,
           uri: tokenURI(tokenId),
-          level: _yoddhaLevel[tokenId]
+          level: _yoddhaLevels[tokenId]
         });
         counter++;
       }
@@ -76,11 +98,11 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
   }
 
   function levelUpYoddhaById(uint256 _yoddhaTokenId) external onlyOwner {
-    _yoddhaLevel[_yoddhaTokenId]++;
+    _yoddhaLevels[_yoddhaTokenId]++;
   }
 
   function withdraw() external payable onlyOwner {
-    address payable _owner = payable(owner());
-    _owner.transfer(address(this).balance);
+    address payable owner = payable(owner());
+    owner.transfer(address(this).balance);
   }
 }
