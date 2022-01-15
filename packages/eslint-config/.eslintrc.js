@@ -81,6 +81,8 @@ module.exports = {
         tryExtensions: ['.jsx', '.js', '.json', '.node'],
       },
     ],
+    'node/no-unpublished-import': 'off',
+    'node/no-unpublished-require': 'off',
     'node/no-unsupported-features/es-syntax': [
       'error',
       { ignores: ['modules'] },

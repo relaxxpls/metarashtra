@@ -2,10 +2,7 @@
   "name": "metarashtra",
   "version": "1.0.0",
   "description": "A MMO game with NFT collectables. Mera Rashtra, MetaRashtra!",
-  "author": {
-    "name": "Laxman Desai",
-    "email": "lolopaw24@gmail.com"
-  },
+  "author": "Laxman Desai <lolopaw24@gmail.com> (https://github.com/relaxxpls)",
   "repository": "https://github.com/relaxxpls/metarashtra.git",
   "license": "MIT",
   "private": true,
@@ -17,9 +14,10 @@
     "server:dev": "yarn workspace @metarashtra/backend dev",
     "server:start": "yarn workspace @metarashtra/backend start"
   },
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  }
+  "workspaces": [
+    "packages/backend",
+    "packages/eslint-config",
+    "packages/frontend",
+    "packages/smart-contracts"
+  ]
 }
