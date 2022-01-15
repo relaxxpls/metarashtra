@@ -11,5 +11,11 @@ module.exports = {
       files: ['hardhat.config.js'],
       globals: { task: true },
     },
+    {
+      files: '*.test.js',
+      rules: {
+        'no-unused-expressions': 'off',
+      },
+    },
   ],
 };

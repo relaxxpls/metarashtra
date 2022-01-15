@@ -10,7 +10,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test --network hardhat",
     "coverage": "hardhat run coverage --network hardhat",
-    "deploy": "node ./_scripts.js deploy",
+    "deploy": "node ./scripts/deploy.js",
     "lint:js": "eslint **/*.{js,ts}",
     "lint:sol": "solhint contracts/**/*.sol",
     "verify": "hardhat etherscan-verify"

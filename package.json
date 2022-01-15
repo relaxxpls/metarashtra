@@ -12,7 +12,11 @@
     "client:start": "yarn workspace @metarashtra/frontend start",
     "client:lint": "yarn workspace @metarashtra/frontend lint",
     "server:dev": "yarn workspace @metarashtra/backend dev",
-    "server:start": "yarn workspace @metarashtra/backend start"
+    "server:start": "yarn workspace @metarashtra/backend start",
+    "contracts:compile": "yarn workspace @metarashtra/smart-contracts compile",
+    "contracts:deploy": "yarn workspace @metarashtra/smart-contracts deploy",
+    "contracts:test": "yarn workspace @metarashtra/smart-contracts test",
+    "contracts:verify": "yarn workspace @metarashtra/smart-contracts verify"
   },
   "workspaces": [
     "packages/backend",

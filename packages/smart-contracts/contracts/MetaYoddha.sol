@@ -31,7 +31,7 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
     updateFee(0.01 ether);
   }
 
-  function mintYoddha(string memory tokenURI) public payable {
+  function mint(string memory tokenURI) public payable {
     require(msg.value >= fee);
 
     uint256 newYoddhaTokenId = _yoddhaTokenIds.current();
@@ -63,6 +63,10 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
     }
 
     return result;
+  }
+
+  function totalSupply() external view returns (uint256) {
+    return _yoddhaTokenIds.current();
   }
 
   // ? Functions for owner (defaults to contract deployer)
