@@ -30,7 +30,7 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
   }
 
   function mint(string memory tokenURI) public payable {
-    require(msg.value >= fee);
+    require(msg.value >= fee, 'MetaYoddha: Mint query for insufficient fee');
 
     // ? start yoddha token id count from 1 instead of 0
     _yoddhaTokenIds.increment();
