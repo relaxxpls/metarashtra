@@ -97,7 +97,20 @@ contract MetaYoddha is Ownable, ERC721URIStorage {
     emit FeeUpdate(_fee);
   }
 
-  function levelUpYoddhaById(uint256 _yoddhaTokenId) external onlyOwner {
+  function upgradeYoddhaById(uint256 _yoddhaTokenId)
+    external
+    payable
+    onlyOwner
+  {
+    require(
+      _exists(_yoddhaTokenId),
+      'MetaYoddha: Upgrade query for nonexistent tokenId'
+    );
+    require(
+      msg.value >= fee,
+      'MetaYoddha: Upgrade query with insufficient fee'
+    );
+
     _yoddhaLevels[_yoddhaTokenId]++;
   }
 
