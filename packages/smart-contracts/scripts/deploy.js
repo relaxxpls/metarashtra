@@ -1,22 +1,23 @@
-const hre = require("hardhat");
-const fs = require("fs");
+const fs = require('fs');
+
+const { ethers } = require('hardhat');
 
 const main = async () => {
-  const Market = await hre.ethers.getContractFactory("Market");
-  const market = await Market.deploy();
-  await market.deployed();
-  console.log("Market deployed to:", market.address);
+  const MetaYoddha = await ethers.getContractFactory('MetaYoddha');
+  const yoddha = await MetaYoddha.deploy();
+  await yoddha.deployed();
+  console.log('MetaYoddha deployed to:', yoddha.address);
 
-  const NFT = await hre.ethers.getContractFactory("NFT");
-  const nft = await NFT.deploy(Market.address);
-  await nft.deployed();
-  console.log("Market deployed to:", nft.address);
+  const MetaSonaToken = await ethers.getContractFactory('MetaSonaToken');
+  const sonaToken = await MetaSonaToken.deploy();
+  await sonaToken.deployed();
+  console.log('MetaSonaToken deployed to:', sonaToken.address);
 
-  const config = JSON.stringify(`
-  export const marketaddress = "${market.address}";
-  export const nftaddress = "${nft.address}";
-  `);
-  fs.writeFileSync("config.js", JSON.parse(config));
+  const addresses = {
+    MetaYoddhaAddress: yoddha.address,
+    MetaSonaTokenAddress: sonaToken.address,
+  };
+  fs.writeFileSync('address.json', JSON.stringify(addresses));
 };
 
 main().catch((error) => {
