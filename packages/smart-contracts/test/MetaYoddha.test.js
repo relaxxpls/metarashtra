@@ -9,9 +9,11 @@ const { expect } = chai;
 
 describe('Yoddha', () => {
   let yoddha;
+  let tokenURI;
 
   beforeEach(async () => {
     const signers = await ethers.getSigners();
+    tokenURI = 'https://ipfs.io/ipfs/my-file';
 
     const yoddhaFactory = await ethers.getContractFactory(
       'MetaYoddha',
@@ -48,7 +50,6 @@ describe('Yoddha', () => {
 
   describe('mint', async () => {
     it('should create a new Yoddha', async () => {
-      const tokenURI = 'https://ipfs.io/ipfs/my-file';
       const fee = await yoddha.fee();
 
       await yoddha.mint(tokenURI, { value: fee });
@@ -74,13 +75,32 @@ describe('Yoddha', () => {
       expect(newYoddha.level).to.equal(1);
       expect(newYoddha.uri).to.equal(tokenURI);
 
-      // const ownersYoddhas = await yoddha.getYoddhasByOwner(signers[0]);
-      // expect(ownersYoddhas).to.equal([newYoddha]);
+      const ownersYoddhas = await yoddha.getYoddhasByOwner(signers[0].address);
+      expect(ownersYoddhas).to.deep.equal([newYoddha]);
+    });
+
+    it('should not create a new Yoddha if the fee is not enough', async () => {
+      const fee = await yoddha.fee();
+
+      expect(yoddha.mint(tokenURI, { value: fee.sub(1) })).to.eventually.throw(
+        'MetaYoddha: Mint query for insufficient fee'
+      );
+    });
+
+    // TODO: Add this test
+    it('should gain value from minting a Yoddha', async () => {
+      const fee = await yoddha.fee();
+
+      expect(yoddha.getBalance()).to.eventually.equal(0);
+      //   // expect(
+      //   //   yoddha.connect(signers[1]).mint(tokenURI, { value: fee })
+      //   // ).to.eventually.changeEtherBalances([signers[1], yoddha], [-fee, fee]);
+
+      //   // const value = await ethers.provider.getBalance(signers[0].address);
     });
   });
 
   describe('upgradeYoddhaById', async () => {
-    const tokenURI = 'https://ipfs.io/ipfs/my-file';
     let fee;
     let newYoddhaId;
 
@@ -103,6 +123,19 @@ describe('Yoddha', () => {
           .connect(signers[1])
           .upgradeYoddhaById(newYoddhaId, { value: fee })
       ).to.eventually.throw('Ownable: caller is not the owner');
+    });
+  });
+
+  // TODO: Add this test
+  describe('withdraw', async () => {
+    it('should allow deployer address to withdraw', async () => {
+      // const amount = ethers.utils.parseEther('1').toString();
+      // await yoddha.connect(signers[1]).mint(tokenURI, { value: amount });
+      // expect(() =>
+      //   wallet.sendTransaction({ to: walletTo.address, value: 200 })
+      // ).to.changeEtherBalance(walletTo, 200);
+      // await yoddha.withdraw();
+      // expect(yoddha.balanceOf(signers[0].address)).to.eventually.equal(0);
     });
   });
 });
