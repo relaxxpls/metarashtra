@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import validator from 'validator';
 
-const userSchema = Schema(
+const userSchema = mongoose.Schema(
   {
     username: {
       type: String,
