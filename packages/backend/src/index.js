@@ -3,6 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import mongoose from 'mongoose';
 import passport from 'passport';
 
 import { logger, successHandler, errorHandler } from './config';
@@ -13,6 +14,11 @@ dotenv.config();
 
 const app = express();
 const httpServer = http.createServer(app);
+
+mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // ? Logging middleware
 app.use(successHandler);
