@@ -8,14 +8,14 @@ const main = async () => {
   await yoddha.deployed();
   console.log('MetaYoddha deployed to:', yoddha.address);
 
-  const MetaSonaToken = await ethers.getContractFactory('MetaSonaToken');
-  const sonaToken = await MetaSonaToken.deploy();
-  await sonaToken.deployed();
-  console.log('MetaSonaToken deployed to:', sonaToken.address);
+  const KanakaToken = await ethers.getContractFactory('KanakaToken');
+  const kanaka = await KanakaToken.deploy();
+  await kanaka.deployed();
+  console.log('KanakaToken deployed to:', kanaka.address);
 
   const addresses = {
     MetaYoddhaAddress: yoddha.address,
-    MetaSonaTokenAddress: sonaToken.address,
+    KanakaTokenAddress: kanaka.address,
   };
   fs.writeFileSync('address.json', JSON.stringify(addresses));
 };

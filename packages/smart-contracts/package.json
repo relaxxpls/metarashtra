@@ -10,7 +10,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test --network hardhat",
     "coverage": "hardhat run coverage --network hardhat",
-    "deploy": "node ./scripts/deploy.js",
+    "deploy": "hardhat run scripts/deploy.js --network polygon_mumbai",
     "lint:js": "eslint **/*.{js,ts}",
     "lint:sol": "solhint contracts/**/*.sol",
     "verify": "hardhat etherscan-verify"
@@ -23,7 +23,7 @@
     "@openzeppelin/contracts": "^4.4.2",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "dotenv": "^12.0.3",
+    "dotenv": "^13.0.1",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.3",
     "hardhat": "^2.8.2",

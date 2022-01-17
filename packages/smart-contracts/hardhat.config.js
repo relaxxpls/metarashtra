@@ -13,8 +13,8 @@ module.exports = {
       chainId: 1337,
     },
 
-    mumbai: {
-      url: process.env.ALCHEMY_MUMBAI_URL,
+    polygon_mumbai: {
+      url: process.env.POLYGON_MUMBAI_URL,
       accounts: [process.env.PRIVATE_KEY],
     },
   },
