@@ -6,7 +6,8 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 // * 80001 - Testnet Mumbai
 // * ref: https://chainlist.org/
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42],
+  supportedChainIds: [80001],
+  // supportedChainIds: [1, 3, 4, 5, 42],
 });
 
 export const walletconnect = new WalletConnectConnector({

@@ -1,146 +1,70 @@
 import { useWeb3React } from '@web3-react/core';
+import { message, Spin } from 'antd';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
 
-const ChainId = () => {
-  const { chainId } = useWeb3React();
-
-  return (
-    <>
-      <span>Chain Id</span>
-      <span role="img" aria-label="chain">
-        ⛓
-      </span>
-      <span>{chainId ?? ''}</span>
-    </>
-  );
-};
-
-const BlockNumber = () => {
-  const { chainId, library } = useWeb3React();
-
-  const [blockNumber, setBlockNumber] = useState();
-
-  useEffect(() => {
-    if (!library) return () => {};
-
-    let stale = false;
-
-    const getBlockNumber = async () => {
-      try {
-        const response = await library.getBlockNumber();
-        if (!stale) {
-          setBlockNumber(response);
-        }
-      } catch (e) {
-        if (!stale) {
-          setBlockNumber(null);
-        }
-      }
-    };
-    getBlockNumber();
-
-    const updateBlockNumber = (_blockNumber) => {
-      setBlockNumber(_blockNumber);
-    };
-    library.on('block', updateBlockNumber);
-
-    return () => {
-      stale = true;
-      library.removeListener('block', updateBlockNumber);
-      setBlockNumber(undefined);
-    };
-  }, [library, chainId]); // ensures refresh if referential identity of library doesn't change across chainIds
-
-  return (
-    <>
-      <span>Block Number</span>
-      <span role="img" aria-label="numbers">
-        🔢
-      </span>
-      <span>{blockNumber === null ? 'Error' : blockNumber ?? ''}</span>
-    </>
-  );
-};
-
-const Account = () => {
-  const { account } = useWeb3React();
-
-  return (
-    <>
-      <span>Account</span>
-      <span role="img" aria-label="robot">
-        🤖
-      </span>
-      <span>
-        {account
-          ? `${account.substring(0, 6)}...${account.substring(
-              account.length - 4
-            )}`
-          : ''}
-      </span>
-    </>
-  );
-};
-
-const Balance = () => {
-  const { account, library, chainId } = useWeb3React();
-
-  const [balance, setBalance] = useState();
+const AccountDetails = () => {
+  const { account, chainId, library } = useWeb3React();
+  const [balance, setBalance] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!(account && library)) return () => {};
-
     let stale = false;
 
     const getBalance = async () => {
+      setLoading(true);
       try {
         const response = await library.getBalance(account);
-        if (!stale) {
-          setBalance(response);
-        }
-      } catch (e) {
-        if (!stale) {
-          setBalance(null);
-        }
+        if (!stale) setBalance(response);
+      } catch (error) {
+        message.error(error.message);
+        if (!stale) setBalance(null);
+      } finally {
+        setLoading(false);
       }
     };
-
     getBalance();
 
+    // ? ensures refresh if referential identity
+    // ? of library doesn't change across chainIds
     return () => {
       stale = true;
-      setBalance(undefined);
+      setBalance(null);
     };
-  }, [account, library, chainId]); // ensures refresh if referential identity of library doesn't change across chainIds
+  }, [account, library, chainId]);
 
   return (
-    <>
-      <span>Balance</span>
-      <span role="img" aria-label="gold">
-        💰
-      </span>
-      <span>{balance ? `Ξ${ethers.utils.formatEther(balance)}` : ''}</span>
-    </>
+    <Spin spinning={loading}>
+      <div
+        style={{
+          display: 'grid',
+          gridGap: '0.5rem',
+          gridTemplateColumns: 'min-content 1fr 1fr',
+          maxWidth: '20rem',
+          margin: 'auto',
+          fontSize: '1.25rem',
+        }}
+      >
+        <span>⛓</span>
+        <span>Chain Id</span>
+        <span>{chainId ?? ''}</span>
+
+        <span>🤖</span>
+        <span>Account</span>
+        <span>
+          {account &&
+            `${account.substring(0, 6)}...${account.substring(
+              account.length - 4
+            )}`}
+        </span>
+
+        <span>💰</span>
+        <span>Balance</span>
+        <span>{balance && ethers.utils.formatEther(balance)}</span>
+      </div>
+    </Spin>
   );
 };
-
-const AccountDetails = () => (
-  <h3
-    style={{
-      display: 'grid',
-      gridGap: '1rem',
-      gridTemplateColumns: '1fr min-content 1fr',
-      maxWidth: '20rem',
-      lineHeight: '2rem',
-      margin: 'auto',
-    }}
-  >
-    <ChainId />
-    <BlockNumber />
-    <Account />
-    <Balance />
-  </h3>
-);
 
 export default AccountDetails;
