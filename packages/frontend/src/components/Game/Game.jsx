@@ -34,7 +34,7 @@ const Game = ({ socket }) => {
     });
 
     socket.on('disconnect', () => {
-      socket.emit('exit', profile);
+      socket.emit('exit');
       setUsers([]);
       setStatus((_status) => ({ ..._status, isDisconnected: true }));
     });

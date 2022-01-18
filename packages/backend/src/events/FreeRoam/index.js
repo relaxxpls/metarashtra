@@ -10,7 +10,9 @@ import {
 
 export const join =
   (io, socket) =>
-  async ({ username, room, coins, score }) => {
+  async ({ coins, score }) => {
+    const { username, room } = socket.handshake.query;
+
     logger.info(`${username} is trying to joining.`);
 
     if (await roomIsFull({ room })) {
@@ -50,7 +52,9 @@ const LIMITS = {
 
 export const movement =
   (io, socket) =>
-  async ({ username, room, move }) => {
+  async ({ move }) => {
+    const { username, room } = socket.handshake.query;
+
     const userState = await getUser({ username, room });
 
     if (!userState) {
@@ -76,10 +80,9 @@ export const movement =
     io.to(room).emit('updateRoomState', users);
   };
 
-export const exit = (io, socket) => async (payload) => {
-  if (!payload) return;
+export const exit = (io, socket) => async () => {
+  const { username, room } = socket.handshake.query;
 
-  const { username, room } = payload;
   const user = removeUser({ username, room });
   if (!user) {
     logger.error(`[Socket ${socket.id}] User does not exist.`);

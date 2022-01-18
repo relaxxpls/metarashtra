@@ -21,11 +21,16 @@ const GameContainer = () => {
   }, [setProfile]);
 
   const handleJoin = useCallback(() => {
+    if (profile.room === null || profile.username === null) return;
     setStatus((_status) => ({ ..._status, loading: true }));
 
     const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
       forceNew: true,
       transports: ['websocket'],
+      query: {
+        room: profile.room,
+        username: profile.username,
+      },
     });
 
     newSocket.on('connect', () => {
@@ -38,7 +43,7 @@ const GameContainer = () => {
       setSocket(null);
       setStatus((_status) => ({ ..._status, isDisconnected: true }));
     });
-  }, [setStatus]);
+  }, [setStatus, profile.username, profile.room]);
 
   useEffect(() => {
     if (!socket?.connected) handleJoin();
