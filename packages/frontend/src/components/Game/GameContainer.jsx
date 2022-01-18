@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
+import { message } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
@@ -11,19 +12,32 @@ import GamePause from './GamePause';
 
 const GameContainer = () => {
   const profile = useRecoilValue(profileState);
-  const socket = useRef(null);
-  const status = useRecoilValue(gameState);
+  const [socket, setSocket] = useState(null);
+  const [status, setStatus] = useRecoilState(gameState);
 
-  const handleJoin = () => {
-    socket.current = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
+  const handleJoin = useCallback(() => {
+    setStatus((_status) => ({ ..._status, loading: true }));
+
+    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
       forceNew: true,
       transports: ['websocket'],
     });
-  };
+
+    newSocket.on('connect', () => {
+      setSocket(newSocket);
+      setStatus((_status) => ({ ..._status, loading: false }));
+    });
+
+    newSocket.on('disconnect', (reason) => {
+      message.error(reason);
+      setSocket(null);
+      setStatus((_status) => ({ ..._status, isDisconnected: true }));
+    });
+  }, [setStatus]);
 
   useEffect(() => {
-    if (socket.current === null) handleJoin();
-  }, []);
+    if (!socket?.connected) handleJoin();
+  }, [socket?.connected, handleJoin]);
 
   const paused = status.isPaused || status.isDisconnected || status.loading;
 
@@ -32,10 +46,10 @@ const GameContainer = () => {
   return (
     <Container>
       <Frame paused={paused}>
-        <Game socket={socket.current} />
+        <Game socket={socket} />
       </Frame>
 
-      {paused && <GamePause socket={socket.current} />}
+      {paused && <GamePause socket={socket} />}
     </Container>
   );
 };

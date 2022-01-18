@@ -5,7 +5,7 @@ import { HiOutlineInformationCircle } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import profileState from '../../recoil/atoms/profile';
+import { profileState } from '../../recoil/atoms';
 import Button from '../shared/Button';
 
 const Character = ({ name, image, description, stats, handleChoice }) => (

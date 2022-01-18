@@ -1,18 +1,22 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import useMoves from '../../hooks/useMoves';
+import { profileState } from '../../recoil/atoms';
 
 const GameControls = ({ socket }) => {
   const { moves, handleMoveCompleted, handlePressing, handleNotPressing } =
     useMoves();
 
+  const { username } = useRecoilValue(profileState);
+
   useEffect(() => {
     if (socket && moves.length) {
-      socket.emit('move', moves.shift());
+      socket.emit('move', { ...moves.shift(), username });
     }
-  }, [socket, moves, handleMoveCompleted]);
+  }, [socket, moves, handleMoveCompleted, username]);
 
   return (
     <Dpad>
