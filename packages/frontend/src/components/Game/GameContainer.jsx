@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
@@ -11,9 +11,14 @@ import Game from './Game';
 import GamePause from './GamePause';
 
 const GameContainer = () => {
-  const profile = useRecoilValue(profileState);
-  const [socket, setSocket] = useState(null);
+  const [profile, setProfile] = useRecoilState(profileState);
   const [status, setStatus] = useRecoilState(gameState);
+
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    setProfile((_profile) => ({ ..._profile, room: 'default' }));
+  }, [setProfile]);
 
   const handleJoin = useCallback(() => {
     setStatus((_status) => ({ ..._status, loading: true }));
@@ -41,7 +46,7 @@ const GameContainer = () => {
 
   const paused = status.isPaused || status.isDisconnected || status.loading;
 
-  if (!profile.nftId) return <CharacterChoice />;
+  if (profile.nftsOwned.length === 0) return <CharacterChoice />;
 
   return (
     <Container>

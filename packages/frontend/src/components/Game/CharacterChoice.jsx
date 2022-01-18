@@ -70,7 +70,7 @@ const CharacterChoice = () => {
   }, []);
 
   const handleCharacterChoice = (choice) => () => {
-    setProfile((_profile) => ({ ..._profile, nftId: choice }));
+    setProfile((_profile) => ({ ..._profile, nftsOwned: [choice] }));
   };
 
   if (loading) return null;

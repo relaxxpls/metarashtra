@@ -7,16 +7,15 @@ import useMoves from '../../hooks/useMoves';
 import { profileState } from '../../recoil/atoms';
 
 const GameControls = ({ socket }) => {
+  const { username, room } = useRecoilValue(profileState);
   const { moves, handleMoveCompleted, handlePressing, handleNotPressing } =
     useMoves();
 
-  const { username } = useRecoilValue(profileState);
-
   useEffect(() => {
     if (socket && moves.length) {
-      socket.emit('move', { ...moves.shift(), username });
+      socket.emit('movement', { username, room, move: moves.shift() });
     }
-  }, [socket, moves, handleMoveCompleted, username]);
+  }, [socket, moves, handleMoveCompleted, username, room]);
 
   return (
     <Dpad>

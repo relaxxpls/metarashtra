@@ -4,8 +4,9 @@ const profileState = atom({
   key: 'profileState',
   default: {
     username: null,
+    room: null,
     address: null,
-    nftId: null,
+    nftsOwned: [],
     coins: 1_000_000,
     score: 0,
   },

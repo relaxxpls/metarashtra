@@ -1,6 +1,5 @@
 import redisClient from '../config/redis';
 import { User } from '../models';
-// import { getRandomCoordinate, getRandomDirection } from '../utils';
 
 export const createUser = async (userBody) => {
   if (User.isUsernameTaken(userBody.email)) {
@@ -12,28 +11,11 @@ export const createUser = async (userBody) => {
 
 const getKey = (room) => `room:${room}`;
 
-export const addUser = async ({ username, room }) => {
-  const newUser = {
-    x: 0,
-    y: 0,
-    facing: 'down',
-  };
-  await redisClient.hSet(getKey(room), username, JSON.stringify(newUser));
+export const updateUser = ({ username, room, userState }) =>
+  redisClient.hSet(getKey(room), username, JSON.stringify(userState));
 
-  return newUser;
-};
-
-export const removeUser = async ({ username, room }) => {
-  await redisClient.hDel(getKey(room), `${username}`);
-};
-
-export const makeMove = async ({ username, room, move }) => {
-  // const users = [];
-  // const userIdx = users.findIndex((user) => user.id === id);
-  // const { x = 0, y = 0 } = users[userIdx].location;
-  // const { dx = 0, dy = 0, facing = 'down' } = move;
-  // users[userIdx].location = { x: x + dx, y: y + dy, facing };
-};
+export const removeUser = ({ username, room }) =>
+  redisClient.hDel(getKey(room), `${username}`);
 
 export const getUser = async ({ username, room }) => {
   const user = await redisClient.hGet(getKey(room), username);
@@ -46,4 +28,11 @@ export const getUsersInRoom = async ({ room }) => {
   usersInRoom = Object.values(usersInRoom).map((value) => JSON.parse(value));
 
   return usersInRoom;
+};
+
+export const roomIsFull = async ({ room }) => {
+  const userCount = await redisClient.hLen(getKey(room));
+  const maxCapacity = 10;
+
+  return userCount >= maxCapacity;
 };
