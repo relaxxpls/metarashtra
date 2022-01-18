@@ -8,7 +8,8 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { injected, walletconnect } from '../../connectors';
-import profileState from '../../recoil/atoms/profile';
+import useMetaYoddhaContract from '../../hooks/useMetaYoddhaContract';
+import { profileState } from '../../recoil/atoms';
 import Button from '../shared/Button';
 import { PageCard } from '../shared/Page';
 
@@ -16,6 +17,7 @@ const MESSAGE = 'I accept relaxxpls as god.';
 
 export const LoggedinContainer = () => {
   const { account, deactivate, library } = useWeb3React();
+  const { contractLoading } = useMetaYoddhaContract();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [profile, setProfile] = useRecoilState(profileState);
@@ -49,8 +51,10 @@ export const LoggedinContainer = () => {
   };
 
   const handlePlayRedirect = () => {
-    message.success('Redirecting to the game...');
-    router.push('/play');
+    if (profile.username) {
+      message.success('Redirecting to the game...');
+      router.push('/play');
+    }
   };
 
   const handleUsername = (e) => {
@@ -59,9 +63,8 @@ export const LoggedinContainer = () => {
 
   return (
     <PageCard>
-      <Spin spinning={loading}>
+      <Spin spinning={contractLoading || loading}>
         <WalletList>
-          <h1>Get started in 3 simple steps!</h1>
           <h2>Step 2: Create a Unique Username</h2>
           <h3>
             Welcome&nbsp;
