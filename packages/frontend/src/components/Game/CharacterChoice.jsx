@@ -1,4 +1,4 @@
-import { message, Progress, Tooltip } from 'antd';
+import { Empty, message, Progress, Tooltip } from 'antd';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { HiOutlineInformationCircle } from 'react-icons/hi';
@@ -80,17 +80,28 @@ const CharacterChoice = () => {
       <h2>Step 3: Choose your character</h2>
 
       <CharacterList>
-        {choices.map(({ id, name, image, description, stats }) => (
-          <li key={id}>
-            <Character
-              name={name}
-              image={image}
-              description={description}
-              stats={stats}
-              handleChoice={handleCharacterChoice(id)}
-            />
-          </li>
-        ))}
+        {choices.length ? (
+          choices.map(({ id, name, image, description, stats }) => (
+            <li key={id}>
+              <Character
+                name={name}
+                image={image}
+                description={description}
+                stats={stats}
+                handleChoice={handleCharacterChoice(id)}
+              />
+            </li>
+          ))
+        ) : (
+          <Empty
+            description={
+              <>
+                <h3>No characters available.</h3>
+                <span>Be sure to check back later!</span>
+              </>
+            }
+          />
+        )}
       </CharacterList>
     </CharacterChoiceContainer>
   );

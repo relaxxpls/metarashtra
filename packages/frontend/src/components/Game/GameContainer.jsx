@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { io } from 'socket.io-client';
 import styled from 'styled-components';
@@ -14,8 +14,6 @@ const GameContainer = () => {
   const socket = useRef(null);
   const status = useRecoilValue(gameState);
 
-  if (!profile.nftId) return <CharacterChoice />;
-
   const handleJoin = () => {
     socket.current = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
       forceNew: true,
@@ -23,17 +21,21 @@ const GameContainer = () => {
     });
   };
 
-  if (socket.current === null) handleJoin();
+  useEffect(() => {
+    if (socket.current === null) handleJoin();
+  }, []);
 
   const paused = status.isPaused || status.isDisconnected || status.loading;
+
+  if (!profile.nftId) return <CharacterChoice />;
 
   return (
     <Container>
       <Frame paused={paused}>
-        <Game socket={socket} />
+        <Game socket={socket.current} />
       </Frame>
 
-      {paused && <GamePause socket={socket} />}
+      {paused && <GamePause socket={socket.current} />}
     </Container>
   );
 };

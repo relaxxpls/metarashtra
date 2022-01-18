@@ -11,19 +11,17 @@ const GamePause = ({ socket }) => {
   const [status, setStatus] = useRecoilState(gameState);
 
   const handleRejoin = () => {
-    if (socket) socket.close();
-    // handleJoin();
-    // socket.open();
+    socket.open();
     setStatus((_status) => ({ ..._status, isDisconnected: false }));
   };
 
   const handleContinue = () => {
     setStatus({ ...status, isPaused: false });
-    socket?.emit('continue');
+    if (socket?.connected) socket.emit('continue');
   };
 
   const handleExit = () => {
-    socket?.emit('exit');
+    if (socket?.connected) socket.emit('exit');
     router.push('/');
   };
 
