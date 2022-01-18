@@ -1,17 +1,24 @@
-/* eslint-disable security/detect-object-injection */
 import styled from 'styled-components';
 
-const Person = ({ username, location }) => (
-  <Character
-    facing={location.facing}
-    walking={location.walking}
-    style={{ left: `${location.x}px`, top: `${location.y}px` }}
-  >
-    <span className="name">{username}</span>
-    <div className="spritesheet" />
-    <div className="shadow" />
-  </Character>
-);
+const Person = ({ isPlayer, username, location }) => {
+  const pixelSize = 3;
+  const { x, y, facing, walking } = location;
+
+  return (
+    <Character
+      isPlayer={isPlayer}
+      facing={facing}
+      walking={walking}
+      style={{
+        transform: `translate3d(${x * pixelSize}px, ${y * pixelSize}px, 0 )`,
+      }}
+    >
+      <span className="name">{username}</span>
+      <div className="spritesheet" />
+      <div className="shadow" />
+    </Character>
+  );
+};
 
 export default Person;
 
@@ -52,7 +59,10 @@ const Character = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    background: url('images/sprite/CharacterShadow.webp') no-repeat no-repeat;
+    background: url(${({ isPlayer }) =>
+      isPlayer
+        ? 'images/sprite/CharacterShadowActive.webp'
+        : 'images/sprite/CharacterShadow.webp'});
     background-size: 100%;
   }
 
