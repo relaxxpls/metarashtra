@@ -1,67 +1,76 @@
 import { logger } from '../../config';
 import {
-  addUser,
   removeUser,
   getUser,
   getUsersInRoom,
-  makeMove,
+  roomIsFull,
+  updateUser,
 } from '../../services/user.service';
+// import { getRandomCoordinate, getRandomDirection } from '../../utils';
 
-export const join = (io, socket) => (payload) => {
-  const numberOfUsersInRoom = getUsersInRoom(payload.room).length;
+export const join =
+  (io, socket) =>
+  async ({ username, room, coins, score }) => {
+    logger.info(`${username} is trying to joining.`);
+    if (await roomIsFull({ room })) {
+      logger.error('Too many participants');
+      return;
+    }
 
-  if (numberOfUsersInRoom >= 10) logger.error('Too many participants');
+    const userState = {
+      username,
+      score,
+      coins,
+      location: {
+        x: 0,
+        y: 0,
+        facing: 'down',
+      },
+    };
+    await updateUser({ username, room, userState });
 
-  const newUser = addUser({
-    id: socket.id,
-    username: payload.username,
-    room: payload.room,
-    nftId: payload.nftId,
-    coins: payload.coins,
-    score: payload.score,
-  });
+    socket.emit('userState', userState);
 
-  socket.join(newUser.room);
+    socket.join(room);
 
-  io.to(newUser.room).emit('updateRoomState', {
-    room: newUser.room,
-    users: getUsersInRoom(newUser.room),
-  });
+    const users = await getUsersInRoom(room);
+    io.to(room).emit('updateRoomState', users);
 
-  socket.emit('currentUserState', newUser);
+    logger.info(`[Socket ${socket.id}] ${username} joined`);
+  };
 
-  logger.info(`[Socket ${socket.id}] ${newUser.username} joined`);
-};
+export const movement =
+  (io, socket) =>
+  async ({ username, room, move }) => {
+    const userState = await getUser(username);
 
-export const move = (io, socket) => (payload) => {
-  const user = getUser(socket.id);
+    if (!userState) {
+      logger.error(`[Socket ${socket.id}] ${username} does not exist.`);
+      return;
+    }
 
-  if (user && payload) {
-    logger.info(`[Socket ${socket.id}] ${user?.username} made a move`);
-    makeMove(user.id, payload);
+    userState.location.x += move.dx;
+    userState.location.y += move.dy;
+    userState.location.facing = move.facing;
 
-    io.to(user.room).emit('updateRoomState', {
-      room: user.room,
-      users: getUsersInRoom(user.room),
-    });
-  } else {
-    logger.error(
-      `[Socket ${socket.id}] ${user?.username} made an invalid move`
-    );
-  }
-};
+    await updateUser({ username, room, userState });
 
-export const disconnect = (io, socket) => () => {
+    const users = await getUsersInRoom(room);
+    io.to(room).emit('updateRoomState', users);
+
+    logger.info(`[Socket ${socket.id}] ${username} made a move`);
+  };
+
+export const disconnect = (io, socket) => async () => {
   const user = removeUser(socket.id);
 
-  if (user) {
-    io.to(user.room).emit('updateRoomState', {
-      room: user.room,
-      users: getUsersInRoom(user.room),
-    });
-
-    logger.info(`[Socket ${socket.id}] ${user.username} left`);
+  if (!user) {
+    logger.error(`[Socket ${socket.id}] User does not exist.`);
+    return;
   }
 
-  logger.info(`[Socket ${socket.id}] Disconnected`);
+  const users = await getUsersInRoom(user.room);
+  io.to(user.room).emit('updateRoomState', users);
+
+  logger.info(`[Socket ${socket.id}] ${user.username} left`);
 };
