@@ -17,7 +17,7 @@ const attachSockets = async (httpServer) => {
   io.on('connection', (socket) => {
     socket.on('join', FreeRoam.join(io, socket));
     socket.on('movement', FreeRoam.movement(io, socket));
-    socket.on('disconnect', FreeRoam.disconnect(io, socket));
+    socket.on('exit', FreeRoam.exit(io, socket));
   });
 };
 

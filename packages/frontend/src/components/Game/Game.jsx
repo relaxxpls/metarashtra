@@ -16,12 +16,14 @@ const Game = ({ socket }) => {
   const profile = useRecoilValue(profileState);
 
   const [users, setUsers] = useState([]);
-  const [player, setPlayer] = useState({ x: 0, y: 0, direction: 'down' });
+  const [player, setPlayer] = useState({
+    location: { x: 0, y: 0, direction: 'down' },
+  });
 
   useEffect(() => {
     if (!socket?.connected) return;
 
-    socket.emit('join', { ...profile });
+    socket.emit('join', profile);
 
     socket.on('updateRoomState', (payload) => {
       setUsers(payload);
@@ -32,7 +34,9 @@ const Game = ({ socket }) => {
     });
 
     socket.on('disconnect', () => {
+      socket.emit('exit', profile);
       setUsers([]);
+      setStatus((_status) => ({ ..._status, isDisconnected: true }));
     });
   }, [profile, setStatus, socket]);
 
@@ -42,7 +46,7 @@ const Game = ({ socket }) => {
   };
 
   const pixelSize = 3;
-  const { x, y } = player;
+  const { x, y } = player.location;
 
   return (
     <>
@@ -58,12 +62,6 @@ const Game = ({ socket }) => {
             }px, 0 )`,
           }}
         >
-          <Person
-            isPlayer
-            username="user.username"
-            location={{ x: 0, y: 0, facing: 'down' }}
-          />
-
           {users.map((user) => (
             <Person
               key={user.username}
