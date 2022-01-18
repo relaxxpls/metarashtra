@@ -5,7 +5,7 @@ const gameStatusState = atom({
   default: {
     isDisconnected: false,
     isPaused: false,
-    loading: true,
+    loading: false,
   },
 });
 
