@@ -1,5 +1,5 @@
 {
-  "name": "@metarashtra/frontend",
+  "name": "@metarashtra/client",
   "version": "1.0.0",
   "description": "NextJS + StyledComponents client for Metarashtra",
   "repository": "https://github.com/relaxxpls/metarashtra",

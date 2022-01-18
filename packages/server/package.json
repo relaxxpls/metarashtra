@@ -1,5 +1,5 @@
 {
-  "name": "@metarashtra/backend",
+  "name": "@metarashtra/server",
   "version": "1.0.0",
   "description": "Express + SocketIO server for Metarashtra",
   "repository": "https://github.com/relaxxpls/metarashtra",

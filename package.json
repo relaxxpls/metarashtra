@@ -7,21 +7,21 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "client:dev": "yarn workspace @metarashtra/frontend dev",
-    "client:build": "yarn workspace @metarashtra/frontend build",
-    "client:start": "yarn workspace @metarashtra/frontend start",
-    "client:lint": "yarn workspace @metarashtra/frontend lint",
-    "server:dev": "yarn workspace @metarashtra/backend dev",
-    "server:start": "yarn workspace @metarashtra/backend start",
+    "client:dev": "yarn workspace @metarashtra/client dev",
+    "client:build": "yarn workspace @metarashtra/client build",
+    "client:start": "yarn workspace @metarashtra/client start",
+    "client:lint": "yarn workspace @metarashtra/client lint",
+    "server:dev": "yarn workspace @metarashtra/server dev",
+    "server:start": "yarn workspace @metarashtra/server start",
     "contracts:compile": "yarn workspace @metarashtra/smart-contracts compile",
     "contracts:deploy": "yarn workspace @metarashtra/smart-contracts deploy",
     "contracts:test": "yarn workspace @metarashtra/smart-contracts test",
     "contracts:verify": "yarn workspace @metarashtra/smart-contracts verify"
   },
   "workspaces": [
-    "packages/backend",
+    "packages/client",
     "packages/eslint-config",
-    "packages/frontend",
+    "packages/server",
     "packages/smart-contracts"
   ]
 }

@@ -29,7 +29,7 @@ module.exports = {
 
   settings: {
     next: {
-      rootDir: '/packages/frontend/',
+      rootDir: '/packages/client/',
     },
   },
 };
