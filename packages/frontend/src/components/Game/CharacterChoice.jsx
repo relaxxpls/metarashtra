@@ -77,7 +77,6 @@ const CharacterChoice = () => {
 
   return (
     <CharacterChoiceContainer>
-      <h1>Get started in 3 simple steps!</h1>
       <h2>Step 3: Choose your character</h2>
 
       <CharacterList>
@@ -118,7 +117,7 @@ const CharacterList = styled.ul`
   gap: 1.5rem;
 `;
 
-const CharacterContainer = styled.button`
+const CharacterContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
