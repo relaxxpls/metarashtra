@@ -51,7 +51,7 @@ const GameContainer = () => {
 
   const paused = status.isPaused || status.isDisconnected || status.loading;
 
-  if (profile.nftsOwned.length === 0) return <CharacterChoice />;
+  if (profile.ownedMetaYoddhas.length === 0) return <CharacterChoice />;
 
   return (
     <Container>

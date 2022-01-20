@@ -70,7 +70,7 @@ const CharacterChoice = () => {
   }, []);
 
   const handleCharacterChoice = (choice) => () => {
-    setProfile((_profile) => ({ ..._profile, nftsOwned: [choice] }));
+    setProfile((_profile) => ({ ..._profile, ownedMetaYoddhas: [choice] }));
   };
 
   if (loading) return null;

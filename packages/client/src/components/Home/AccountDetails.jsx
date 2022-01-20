@@ -61,7 +61,7 @@ const AccountDetails = () => {
 
         <span>💰</span>
         <span>Balance</span>
-        <span>{balance && ethers.utils.formatEther(balance)}</span>
+        <span>Ξ {balance ? ethers.utils.formatEther(balance) : 0}</span>
       </div>
     </Spin>
   );

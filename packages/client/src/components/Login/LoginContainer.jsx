@@ -1,3 +1,5 @@
+import contractAddress from '@metarashtra/smart-contracts/address.json';
+import MetaYoddha from '@metarashtra/smart-contracts/artifacts/contracts/MetaYoddha.sol/MetaYoddha.json';
 import { useWeb3React } from '@web3-react/core';
 import { Input, message, Spin, Tooltip } from 'antd';
 import Image from 'next/image';
@@ -8,7 +10,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { injected, walletconnect } from '../../connectors';
-import useMetaYoddhaContract from '../../hooks/useMetaYoddhaContract';
+import { useContract } from '../../hooks';
 import { profileState } from '../../recoil/atoms';
 import Button from '../shared/Button';
 import { PageCard } from '../shared/Page';
@@ -16,11 +18,15 @@ import { PageCard } from '../shared/Page';
 const MESSAGE = 'I accept relaxxpls as god.';
 
 export const LoggedinContainer = () => {
-  const { account, deactivate, library } = useWeb3React();
-  const { contractLoading } = useMetaYoddhaContract();
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { account, deactivate, library } = useWeb3React();
+  const contract = useContract({
+    address: contractAddress.MetaYoddhaAddress,
+    abi: MetaYoddha.abi,
+  });
+
   const [profile, setProfile] = useRecoilState(profileState);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (account) {
@@ -30,6 +36,26 @@ export const LoggedinContainer = () => {
       }));
     }
   }, [account, setProfile]);
+
+  useEffect(() => {
+    if (!account) return;
+
+    const testContract = async () => {
+      try {
+        setLoading(true);
+        const usersYoddhas = await contract.getYoddhasByOwner(account);
+        setProfile((_profile) => ({
+          ..._profile,
+          ownedMetaYoddhas: usersYoddhas,
+        }));
+      } catch (error) {
+        message.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    testContract();
+  }, [account, contract, setProfile]);
 
   if (!(library && account)) return null;
 
@@ -63,7 +89,7 @@ export const LoggedinContainer = () => {
 
   return (
     <PageCard>
-      <Spin spinning={contractLoading || loading}>
+      <Spin spinning={loading}>
         <WalletList>
           <h2>Step 2: Create a Unique Username</h2>
           <h3>

@@ -6,7 +6,7 @@ const profileState = atom({
     username: null,
     room: null,
     address: null,
-    nftsOwned: [],
+    ownedMetaYoddhas: [],
     coins: 1_000_000,
     score: 0,
   },
