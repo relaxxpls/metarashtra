@@ -18,6 +18,11 @@ const attachSockets = async (httpServer) => {
     socket.on('join', FreeRoam.join(io, socket));
     socket.on('movement', FreeRoam.movement(io, socket));
     socket.on('exit', FreeRoam.exit(io, socket));
+    socket.on('disconnect', FreeRoam.exit(io, socket));
+
+    socket.on('battle:request', Battle.request(io, socket));
+    socket.on('battle:accept', Battle.accept(io, socket));
+    socket.on('battle:reject', Battle.reject(io, socket));
   });
 };
 

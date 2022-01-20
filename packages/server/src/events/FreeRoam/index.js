@@ -7,6 +7,8 @@ import {
   updateUser,
 } from '../../services/user.service';
 
+export const personalRoom = (username) => `user:${username}`;
+
 export const join =
   (io, socket) =>
   async ({ coins, score }) => {
@@ -34,6 +36,7 @@ export const join =
     socket.emit('userState', userState);
 
     socket.join(room);
+    socket.join(personalRoom(username));
 
     const users = await getUsersInRoom({ room });
     io.to(room).emit('updateRoomState', users);
@@ -89,6 +92,7 @@ export const exit = (io, socket) => async () => {
   }
 
   socket.leave(room);
+  socket.leave(personalRoom(username));
   const users = await getUsersInRoom({ room });
   io.to(room).emit('updateRoomState', users);
 
