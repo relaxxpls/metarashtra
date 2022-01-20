@@ -1,18 +1,21 @@
 import { Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
+import { HiOutlineX } from 'react-icons/hi';
 import styled from 'styled-components';
+
+import Button from '../shared/Button';
 
 const interactions = {
   battle: {
     request: {
       Message: ({ username }) => (
-        <>
+        <h3>
           Press <Typography.Text keyboard>Space</Typography.Text> to challenge
           <b> {username} </b>
           to a battle!
-        </>
+        </h3>
       ),
-      onKeyPress:
+      onKeyDown:
         ({ socket, username }) =>
         (event) => {
           if (event.key === ' ' && username) {
@@ -22,21 +25,34 @@ const interactions = {
     },
     requestRecieved: {
       Message: ({ opponent }) => (
-        <>
+        <h3>
           <b> {opponent} </b> challenged you to a battle! Press
           <Typography.Text keyboard>Space</Typography.Text> to accept, or
           <Typography.Text keyboard>Esc</Typography.Text> to reject.
-        </>
+        </h3>
       ),
-      onKeyPress:
+      onKeyDown:
         ({ socket, opponent }) =>
         (event) => {
-          if (event.key === ' ' && opponent) {
+          if (event.key === ' ' && opponent)
             socket.emit('battle:accept', { opponent });
-          } else if (event.key === 'Escape') {
+          else if (event.key === 'Escape')
             socket.emit('battle:reject', { opponent });
-          }
         },
+    },
+    requestAccepted: {
+      Message: ({ opponent }) => (
+        <h3>
+          <b> {opponent} </b> is ready to battle! The battle will begin shortly.
+        </h3>
+      ),
+    },
+    requestRejected: {
+      Message: ({ opponent }) => (
+        <h3>
+          <b> {opponent} </b> rejected your battle offer. Try again later!
+        </h3>
+      ),
     },
   },
 };
@@ -69,7 +85,7 @@ const Interact = ({ socket, player, users }) => {
             username={nearbyPlayer.username}
           />
         ),
-        onKeyPress: interactions.battle.request.onKeyPress({
+        onKeyDown: interactions.battle.request.onKeyDown({
           socket,
           username: nearbyPlayer.username,
         }),
@@ -79,22 +95,46 @@ const Interact = ({ socket, player, users }) => {
 
   useEffect(() => {
     if (interaction === null) return () => {};
-    document.addEventListener('keypress', interaction.onKeyPress);
+    document.addEventListener('keydown', interaction.onKeyDown);
 
     return () => {
-      document.removeEventListener('keypress', interaction.onKeyPress);
+      document.removeEventListener('keydown', interaction.onKeyDown);
     };
   }, [interaction]);
 
   useEffect(() => {
     socket.on('battle:request', ({ opponent }) => {
-      setInteraction((_interaction) => {
+      setInteraction(() => {
         if (!nearbyPlayer) return null;
-        const { Message, onKeyPress } = interactions.battle.requestRecieved;
+        const { Message, onKeyDown } = interactions.battle.requestRecieved;
 
         return {
           Message: <Message opponent={opponent} />,
-          onKeyPress: onKeyPress({ socket, opponent }),
+          onKeyDown: onKeyDown({ socket, opponent }),
+        };
+      });
+    });
+
+    socket.on('battle:reject', ({ opponent }) => {
+      setInteraction(() => {
+        if (!nearbyPlayer) return null;
+        const { Message } = interactions.battle.requestRejected;
+
+        return {
+          Message: <Message opponent={opponent} />,
+          onKeyDown: () => {},
+        };
+      });
+    });
+
+    socket.on('battle:accept', ({ opponent }) => {
+      setInteraction(() => {
+        if (!nearbyPlayer) return null;
+        const { Message } = interactions.battle.requestAccepted;
+
+        return {
+          Message: <Message opponent={opponent} />,
+          onKeyDown: () => {},
         };
       });
     });
@@ -102,15 +142,24 @@ const Interact = ({ socket, player, users }) => {
 
   if (interaction === null) return null;
 
+  const handleClear = () => setInteraction(null);
+
   return (
     <Container>
-      <h3>
-        {interaction.Message}
+      {interaction.Message}
 
-        {/* Press <Typography.Text keyboard>Space</Typography.Text> to challenge
-        <b> {nearbyPlayer.username} </b>
-        to a battle! */}
-      </h3>
+      <Button
+        type="text"
+        shape="circle"
+        size="small"
+        icon={<HiOutlineX size="16" />}
+        onClick={handleClear}
+        style={{
+          position: 'absolute',
+          top: '0.75rem',
+          right: '0.5rem',
+        }}
+      />
     </Container>
   );
 };
@@ -123,7 +172,7 @@ const Container = styled.div`
   left: 0;
   bottom: 0;
   margin: 0 8rem 0.5rem 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
   background: #ffffffee;
   border-radius: 8px;
 

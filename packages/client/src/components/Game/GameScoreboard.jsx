@@ -15,7 +15,11 @@ const GameFooter = ({ handlePause }) => {
         icon={<HiOutlinePause size="30" />}
         type="text"
         onClick={handlePause}
-        style={{ border: 'none', padding: '0', width: 'initial' }}
+        style={{
+          border: 'none',
+          padding: '0',
+          width: 'initial',
+        }}
       />
 
       <div>
