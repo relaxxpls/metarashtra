@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { profileState } from '../../recoil/atoms';
-import Button from '../shared/Button';
+import { Button } from '../shared';
 
 const Character = ({ name, image, description, stats, handleChoice }) => (
   <CharacterContainer type="button" onClick={handleChoice}>

@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import { RecoilRoot } from 'recoil';
 
 import client from '../apollo-client';
+import { EagerLogin } from '../components/Auth';
 import '../styles/globals.css';
 
 const getLibrary = (provider) => {
@@ -17,7 +18,9 @@ const MyApp = ({ Component, pageProps }) => (
   <RecoilRoot>
     <Web3ReactProvider getLibrary={getLibrary}>
       <ApolloProvider client={client}>
-        <Component {...pageProps} />
+        <EagerLogin>
+          <Component {...pageProps} />
+        </EagerLogin>
       </ApolloProvider>
     </Web3ReactProvider>
   </RecoilRoot>

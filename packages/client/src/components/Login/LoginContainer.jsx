@@ -12,8 +12,7 @@ import styled from 'styled-components';
 import { injected, walletconnect } from '../../connectors';
 import { useContract } from '../../hooks';
 import { profileState } from '../../recoil/atoms';
-import Button from '../shared/Button';
-import { PageCard } from '../shared/Page';
+import { Button, PageCard } from '../shared';
 
 const MESSAGE = 'I accept relaxxpls as god.';
 
@@ -29,23 +28,15 @@ export const LoggedinContainer = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (account) {
-      setProfile((_profile) => ({
-        ..._profile,
-        address: account,
-      }));
-    }
-  }, [account, setProfile]);
-
-  useEffect(() => {
     if (!account) return;
 
-    const testContract = async () => {
+    const loadMetaYoddhas = async () => {
       try {
         setLoading(true);
         const usersYoddhas = await contract.getYoddhasByOwner(account);
         setProfile((_profile) => ({
           ..._profile,
+          address: account,
           ownedMetaYoddhas: usersYoddhas,
         }));
       } catch (error) {
@@ -54,7 +45,8 @@ export const LoggedinContainer = () => {
         setLoading(false);
       }
     };
-    testContract();
+
+    loadMetaYoddhas();
   }, [account, contract, setProfile]);
 
   if (!(library && account)) return null;
