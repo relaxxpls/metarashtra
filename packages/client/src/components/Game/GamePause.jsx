@@ -1,17 +1,18 @@
 import { Spin } from 'antd';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { gameState } from '../../recoil/atoms';
+import { gameState, profileState } from '../../recoil/atoms';
 import Button from '../shared/Button';
 import { PageCard } from '../shared/Page';
 
 const GamePause = ({ socket }) => {
   const router = useRouter();
+  const profile = useRecoilValue(profileState);
   const [status, setStatus] = useRecoilState(gameState);
 
   const handleRejoin = () => {
-    socket.open();
+    socket.emit('join', profile);
     setStatus((_status) => ({ ..._status, isDisconnected: false }));
   };
 

@@ -1,3 +1,5 @@
+import contractAddress from '@metarashtra/smart-contracts/address.json';
+import MetaYoddha from '@metarashtra/smart-contracts/artifacts/contracts/MetaYoddha.sol/MetaYoddha.json';
 import { Empty, message, Progress, Tooltip } from 'antd';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -5,6 +7,7 @@ import { HiOutlineInformationCircle } from 'react-icons/hi';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { useContract } from '../../hooks';
 import { profileState } from '../../recoil/atoms';
 import { Button } from '../shared';
 
@@ -49,6 +52,10 @@ const CharacterChoice = () => {
   const [loading, setLoading] = useState(true);
   const [choices, setChoices] = useState([]);
   const setProfile = useSetRecoilState(profileState);
+  const contract = useContract({
+    address: contractAddress.MetaYoddhaAddress,
+    abi: MetaYoddha.abi,
+  });
 
   useEffect(() => {
     const fetchChoices = async () => {

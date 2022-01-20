@@ -6,7 +6,6 @@ import {
   roomIsFull,
   updateUser,
 } from '../../services/user.service';
-// import { getRandomCoordinate, getRandomDirection } from '../../utils';
 
 export const join =
   (io, socket) =>
