@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
@@ -7,6 +7,7 @@ import Person from '../Person/Person';
 
 import GameControls from './GameControls';
 import GameScore from './GameScoreboard';
+import Interact from './Interact';
 
 // TODO: Make the game dynamic (i.e. based on the room name)
 // TODO: Add a "waiting for players" screen
@@ -16,9 +17,13 @@ const Game = ({ socket }) => {
   const profile = useRecoilValue(profileState);
 
   const [users, setUsers] = useState([]);
-  const [player, setPlayer] = useState({
-    location: { x: 0, y: 0, direction: 'down' },
-  });
+  const [player, setPlayer] = useState({});
+
+  const handleDisconnect = useCallback(() => {
+    socket.emit('exit');
+    setUsers([]);
+    setStatus((_status) => ({ ..._status, isDisconnected: true }));
+  }, [setStatus, socket]);
 
   useEffect(() => {
     if (!socket?.connected) return;
@@ -26,19 +31,16 @@ const Game = ({ socket }) => {
     socket.emit('join', profile);
 
     socket.on('updateRoomState', (payload) => {
-      setUsers(payload);
+      if (payload.length === 0) handleDisconnect();
+      else setUsers(payload);
     });
 
     socket.on('userState', (payload) => {
       setPlayer(payload);
     });
 
-    socket.on('disconnect', () => {
-      socket.emit('exit');
-      setUsers([]);
-      setStatus((_status) => ({ ..._status, isDisconnected: true }));
-    });
-  }, [profile, setStatus, socket]);
+    socket.on('disconnect', handleDisconnect);
+  }, [profile, setStatus, socket, handleDisconnect]);
 
   const handlePause = () => {
     setStatus({ ...status, isPaused: true });
@@ -46,7 +48,7 @@ const Game = ({ socket }) => {
   };
 
   const pixelSize = 3;
-  const { x, y } = player.location;
+  const { x, y } = player?.location ?? { x: 0, y: 0 };
 
   return (
     <>
@@ -71,6 +73,10 @@ const Game = ({ socket }) => {
             />
           ))}
         </Map>
+
+        {socket?.connected && (
+          <Interact socket={socket} player={player} users={users} />
+        )}
       </Camera>
     </>
   );
