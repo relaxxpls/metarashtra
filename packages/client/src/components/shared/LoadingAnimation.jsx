@@ -1,12 +1,12 @@
-import styled, { keyframes } from 'styled-components/macro';
+import styled, { keyframes } from 'styled-components';
 
-export const LoadingAnimation = ({ fixed }) => {
+export const LoadingAnimation = ({ fixed }) => (
   <Container style={fixed && { position: 'fixed' }}>
     <LoaderTrack>
       <LoaderFill />
     </LoaderTrack>
-  </Container>;
-};
+  </Container>
+);
 
 export default LoadingAnimation;
 
