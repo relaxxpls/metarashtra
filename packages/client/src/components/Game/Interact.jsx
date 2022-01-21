@@ -1,12 +1,15 @@
 import { Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { HiOutlineX } from 'react-icons/hi';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
+import { battleState } from '../../recoil/atoms';
 import Button from '../shared/Button';
 
 const Interact = ({ socket, player, users }) => {
   const [interaction, setInteraction] = useState(null);
+  const setBattle = useSetRecoilState(battleState);
 
   const nearbyPlayer = useMemo(
     () =>
@@ -14,7 +17,7 @@ const Interact = ({ socket, player, users }) => {
         const dx = Math.abs(user.location.x - player.location.x);
         const dy = Math.abs(user.location.y - player.location.y);
 
-        return dx < 20 && dy < 20 && user.opponent !== player.username;
+        return dx < 20 && dy < 20 && user.username !== player.username;
       }),
     [player, users]
   );
@@ -101,8 +104,14 @@ const Interact = ({ socket, player, users }) => {
         ),
         onKeyDown: () => {},
       });
+
+      setBattle((_battle) => ({
+        ..._battle,
+        status: true,
+        opponent,
+      }));
     });
-  }, [socket, nearbyPlayer]);
+  }, [socket, nearbyPlayer, setBattle]);
 
   if (interaction === null) return null;
 

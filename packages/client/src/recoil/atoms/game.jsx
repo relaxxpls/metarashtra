@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
-const gameStatusState = atom({
-  key: 'gameState',
+export const freeroamState = atom({
+  key: 'freeroamState',
   default: {
     isDisconnected: false,
     isPaused: false,
@@ -9,4 +9,14 @@ const gameStatusState = atom({
   },
 });
 
-export default gameStatusState;
+export const battleState = atom({
+  key: 'battleState',
+  default: {
+    status: false,
+    opponent: null,
+    stats: {
+      health: 100,
+      mana: 100,
+    },
+  },
+});

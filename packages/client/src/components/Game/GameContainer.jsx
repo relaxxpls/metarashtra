@@ -1,18 +1,20 @@
 import { message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
-import { gameState, profileState } from '../../recoil/atoms';
+import { freeroamState, battleState, profileState } from '../../recoil/atoms';
 
+import Battle from './Battle';
 import CharacterChoice from './CharacterChoice';
 import Game from './Game';
 import GamePause from './GamePause';
 
 const GameContainer = () => {
   const [profile, setProfile] = useRecoilState(profileState);
-  const [status, setStatus] = useRecoilState(gameState);
+  const [status, setStatus] = useRecoilState(freeroamState);
+  const battle = useRecoilValue(battleState);
 
   const [socket, setSocket] = useState(null);
 
@@ -56,7 +58,7 @@ const GameContainer = () => {
   return (
     <Container>
       <Frame paused={paused}>
-        <Game socket={socket} />
+        {battle.status ? <Battle socket={socket} /> : <Game socket={socket} />}
       </Frame>
 
       {paused && <GamePause socket={socket} />}

@@ -1,2 +1,2 @@
-export { default as gameState } from './game';
+export { freeroamState, battleState } from './game';
 export { default as profileState } from './profile';

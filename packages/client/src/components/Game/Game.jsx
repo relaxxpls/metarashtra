@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { gameState, profileState } from '../../recoil/atoms';
+import { freeroamState, profileState } from '../../recoil/atoms';
 import Person from '../Person/Person';
 
 import GameControls from './GameControls';
@@ -13,7 +13,7 @@ import Interact from './Interact';
 // TODO: Add a "waiting for players" screen
 // TODO: Limit the number of players
 const Game = ({ socket }) => {
-  const [status, setStatus] = useRecoilState(gameState);
+  const [status, setStatus] = useRecoilState(freeroamState);
   const profile = useRecoilValue(profileState);
 
   const [users, setUsers] = useState([]);
