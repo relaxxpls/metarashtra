@@ -41,14 +41,16 @@ const Character = styled.div`
     justify-content: center;
     align-items: center;
     position: absolute;
-    padding: 2px 10px;
+    padding: 3px 12px;
     top: 0;
     left: 50%;
-    max-width: calc(var(--grid-cell) * 2);
-    transform: translate(-50%, 50%);
-    background: #f5f5f5cc;
+    transform: scale(0.5, 0.75) translate(-50%, 60%);
+    letter-spacing: 1px;
+    transform-origin: left;
+    background: #00000099;
+    color: #f5f5f5;
     white-space: nowrap;
-    font-family: Monospace;
+    font-family: 'Press Start 2P', cursive;
     font-weight: bold;
     border-radius: 8px;
   }

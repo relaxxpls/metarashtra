@@ -23,15 +23,15 @@ const GameFooter = ({ handlePause }) => {
       />
 
       <div>
-        <p>
-          <FaEthereum size="18" />
-          Coins: {profile.coins}
-        </p>
+        <ScoreContainer>
+          <FaEthereum size="24" />
+          <span>Coins: {profile.coins}</span>
+        </ScoreContainer>
 
-        <p>
-          <FaTrophy size="14" />
-          Score: {profile.score}
-        </p>
+        <ScoreContainer>
+          <FaTrophy size="30" />
+          <span>Score: {profile.score}</span>
+        </ScoreContainer>
       </div>
     </Container>
   );
@@ -46,37 +46,34 @@ const Container = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   box-sizing: border-box;
   background: #f5f5f5ee;
   border-bottom-right-radius: 8px;
   font-weight: bold;
   color: #434343;
+`;
 
-  p {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    font-family: 'JetBrains Mono', monospace;
+const ScoreContainer = styled.div`
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform-origin: left;
+  transform: scale(0.75);
+  white-space: nowrap;
+  margin-right: -3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-    &:not(:first-child) {
-      margin: 6px 0 0 0;
-    }
-
-    svg {
-      margin: 0 6px 0 0;
-      width: 18px !important;
-      text-align: center;
-    }
+  span {
+    font-family: 'Press Start 2P', monospace;
   }
 
-  .controls {
-    text-align: right;
-    padding: 0 0 2px 0;
-
-    svg {
-      margin: 0 0 0 6px;
-    }
+  svg {
+    margin: 0 6px 0 0;
+    width: 18px !important;
+    text-align: center;
   }
 `;

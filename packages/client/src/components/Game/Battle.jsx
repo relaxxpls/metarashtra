@@ -9,9 +9,9 @@ const Battle = () => {
 
   return (
     <BattleContainer>
-      <h1>
+      <Title>
         {battle.opponent} v/s {profile.username}
-      </h1>
+      </Title>
     </BattleContainer>
   );
 };
@@ -19,7 +19,26 @@ const Battle = () => {
 export default Battle;
 
 const BattleContainer = styled.div`
-  background: white;
   height: 100%;
   width: 100%;
+  background: url('images/terrain/battle.png');
+  background-size: 100%;
+  image-rendering: pixelated;
+`;
+
+const Title = styled.h1`
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  transform: translate(-50%, 0);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  background: #f5f5f5dd;
+  border-radius: 8px;
 `;
