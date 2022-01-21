@@ -5,58 +5,6 @@ import styled from 'styled-components';
 
 import Button from '../shared/Button';
 
-const interactions = {
-  battle: {
-    request: {
-      Message: ({ username }) => (
-        <h3>
-          Press <Typography.Text keyboard>Space</Typography.Text> to challenge
-          <b> {username} </b>
-          to a battle!
-        </h3>
-      ),
-      onKeyDown:
-        ({ socket, username }) =>
-        (event) => {
-          if (event.key === ' ' && username) {
-            socket.emit('battle:request', { opponent: username });
-          }
-        },
-    },
-    requestRecieved: {
-      Message: ({ opponent }) => (
-        <h3>
-          <b> {opponent} </b> challenged you to a battle! Press
-          <Typography.Text keyboard>Space</Typography.Text> to accept, or
-          <Typography.Text keyboard>Esc</Typography.Text> to reject.
-        </h3>
-      ),
-      onKeyDown:
-        ({ socket, opponent }) =>
-        (event) => {
-          if (event.key === ' ' && opponent)
-            socket.emit('battle:accept', { opponent });
-          else if (event.key === 'Escape')
-            socket.emit('battle:reject', { opponent });
-        },
-    },
-    requestAccepted: {
-      Message: ({ opponent }) => (
-        <h3>
-          <b> {opponent} </b> is ready to battle! The battle will begin shortly.
-        </h3>
-      ),
-    },
-    requestRejected: {
-      Message: ({ opponent }) => (
-        <h3>
-          <b> {opponent} </b> rejected your battle offer. Try again later!
-        </h3>
-      ),
-    },
-  },
-};
-
 const Interact = ({ socket, player, users }) => {
   const [interaction, setInteraction] = useState(null);
 
@@ -66,7 +14,7 @@ const Interact = ({ socket, player, users }) => {
         const dx = Math.abs(user.location.x - player.location.x);
         const dy = Math.abs(user.location.y - player.location.y);
 
-        return dx < 20 && dy < 20 && user.username !== player.username;
+        return dx < 20 && dy < 20 && user.opponent !== player.username;
       }),
     [player, users]
   );
@@ -78,17 +26,21 @@ const Interact = ({ socket, player, users }) => {
     setInteraction((_interaction) => {
       if (!nearbyPlayer) return null;
       if (_interaction !== null) return _interaction;
+      const opponent = nearbyPlayer.username;
 
       return {
         Message: (
-          <interactions.battle.request.Message
-            username={nearbyPlayer.username}
-          />
+          <h3>
+            Press <Typography.Text keyboard>Space</Typography.Text> to challenge
+            <b> {opponent} </b>
+            to a battle!
+          </h3>
         ),
-        onKeyDown: interactions.battle.request.onKeyDown({
-          socket,
-          username: nearbyPlayer.username,
-        }),
+        onKeyDown: (event) => {
+          if (event.key === ' ' && opponent) {
+            socket.emit('battle:request', { opponent });
+          }
+        },
       };
     });
   }, [nearbyPlayer, socket]);
@@ -102,47 +54,57 @@ const Interact = ({ socket, player, users }) => {
     };
   }, [interaction]);
 
+  const handleCloseInteraction = () => setInteraction(null);
+
   useEffect(() => {
     socket.on('battle:request', ({ opponent }) => {
       setInteraction(() => {
         if (!nearbyPlayer) return null;
-        const { Message, onKeyDown } = interactions.battle.requestRecieved;
 
         return {
-          Message: <Message opponent={opponent} />,
-          onKeyDown: onKeyDown({ socket, opponent }),
+          Message: (
+            <h3>
+              <b> {opponent} </b> challenged you to a battle! Press
+              <Typography.Text keyboard>Space</Typography.Text> to accept, or
+              <Typography.Text keyboard>Esc</Typography.Text> to reject.
+            </h3>
+          ),
+          onKeyDown: (event) => {
+            if (event.key === ' ' && opponent)
+              socket.emit('battle:accept', { opponent });
+            else if (event.key === 'Escape')
+              socket.emit('battle:reject', { opponent });
+            handleCloseInteraction();
+          },
         };
       });
     });
 
     socket.on('battle:reject', ({ opponent }) => {
-      setInteraction(() => {
-        if (!nearbyPlayer) return null;
-        const { Message } = interactions.battle.requestRejected;
-
-        return {
-          Message: <Message opponent={opponent} />,
-          onKeyDown: () => {},
-        };
+      setInteraction({
+        Message: (
+          <h3>
+            <b> {opponent} </b> rejected your battle offer. Try again later!
+          </h3>
+        ),
+        onKeyDown: () => {},
       });
     });
 
     socket.on('battle:accept', ({ opponent }) => {
-      setInteraction(() => {
-        if (!nearbyPlayer) return null;
-        const { Message } = interactions.battle.requestAccepted;
-
-        return {
-          Message: <Message opponent={opponent} />,
-          onKeyDown: () => {},
-        };
+      setInteraction({
+        Message: (
+          <h3>
+            <b> {opponent} </b> is ready to battle! The battle will begin
+            shortly.
+          </h3>
+        ),
+        onKeyDown: () => {},
       });
     });
   }, [socket, nearbyPlayer]);
 
   if (interaction === null) return null;
-
-  const handleClear = () => setInteraction(null);
 
   return (
     <Container>
@@ -153,7 +115,7 @@ const Interact = ({ socket, player, users }) => {
         shape="circle"
         size="small"
         icon={<HiOutlineX size="16" />}
-        onClick={handleClear}
+        onClick={handleCloseInteraction}
         style={{
           position: 'absolute',
           top: '0.75rem',
