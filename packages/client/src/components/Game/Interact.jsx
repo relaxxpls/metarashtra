@@ -42,6 +42,17 @@ const Interact = ({ socket, player, users }) => {
         onKeyDown: (event) => {
           if (event.key === ' ' && opponent) {
             socket.emit('battle:request', { opponent });
+
+            setInteraction(() => ({
+              Message: (
+                <h3>
+                  Battle pending...
+                  <br />
+                  Waiting for <b>{opponent}</b> to respond.
+                </h3>
+              ),
+              onKeyDown: () => {},
+            }));
           }
         },
       };
@@ -73,10 +84,12 @@ const Interact = ({ socket, player, users }) => {
             </h3>
           ),
           onKeyDown: (event) => {
-            if (event.key === ' ' && opponent)
+            if (event.key === ' ' && opponent) {
               socket.emit('battle:accept', { opponent });
-            else if (event.key === 'Escape')
+              setBattle({ status: true, opponent });
+            } else if (event.key === 'Escape') {
               socket.emit('battle:reject', { opponent });
+            }
             handleCloseInteraction();
           },
         };
@@ -105,11 +118,7 @@ const Interact = ({ socket, player, users }) => {
         onKeyDown: () => {},
       });
 
-      setBattle((_battle) => ({
-        ..._battle,
-        status: true,
-        opponent,
-      }));
+      setBattle({ status: true, opponent });
     });
   }, [socket, nearbyPlayer, setBattle]);
 

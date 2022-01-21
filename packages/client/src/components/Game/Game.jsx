@@ -52,7 +52,6 @@ const Game = ({ socket }) => {
 
   return (
     <>
-      <GameCorners />
       <GameScore handlePause={handlePause} />
       {socket?.connected && <GameControls socket={socket} />}
 
@@ -83,45 +82,6 @@ const Game = ({ socket }) => {
 };
 
 export default Game;
-
-const GameCorners = () => (
-  <Corner>
-    <div className="corner_topleft" />
-    <div className="corner_topright" />
-    <div className="corner_bottomleft" />
-    <div className="corner_bottomright" />
-  </Corner>
-);
-
-const Corner = styled.div`
-  .corner_topleft,
-  .corner_topright,
-  .corner_bottomleft,
-  .corner_bottomright {
-    position: absolute;
-    width: var(--pixel-size);
-    height: var(--pixel-size);
-    background: var(--bg);
-    z-index: 2;
-  }
-
-  .corner_topleft {
-    top: calc(var(--pixel-size) * -1);
-    left: calc(var(--pixel-size) * -1);
-  }
-  .corner_topright {
-    top: calc(var(--pixel-size) * -1);
-    right: calc(var(--pixel-size) * -1);
-  }
-  .corner_bottomleft {
-    bottom: calc(var(--pixel-size) * -1);
-    left: calc(var(--pixel-size) * -1);
-  }
-  .corner_bottomright {
-    bottom: calc(var(--pixel-size) * -1);
-    right: calc(var(--pixel-size) * -1);
-  }
-`;
 
 const Camera = styled.div`
   width: calc(var(--pixel-size) * 160);
