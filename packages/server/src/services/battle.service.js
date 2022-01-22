@@ -8,7 +8,7 @@ export const getBattle = async ({ battleId }) => {
   return battleState ? JSON.parse(battleState) : null;
 };
 
-export const updateUser = ({ battleId, battleState }) =>
+export const updateBattle = ({ battleId, battleState }) =>
   redisClient.set(getKey(battleId), JSON.stringify(battleState));
 
 export const removeBattle = ({ battleId }) => redisClient.del(getKey(battleId));

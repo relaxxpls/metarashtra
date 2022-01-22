@@ -3,19 +3,49 @@ import styled from 'styled-components';
 import BattleHeader from './BattleHeader';
 import BattleMove from './BattleMoves';
 
+const moves = [
+  {
+    id: 1,
+    title: 'Kick',
+    timeout: 2000,
+    color: '#E97461',
+    type: 'attack',
+    value: 10,
+  },
+  {
+    id: 2,
+    title: 'Brace',
+    timeout: 1000,
+    color: '#008DF0',
+    type: 'defence',
+    value: 5,
+  },
+  {
+    id: 3,
+    title: 'Eat laddoo',
+    timeout: 5000,
+    color: '#00C19A',
+    type: 'heal',
+    value: 5,
+  },
+  {
+    id: 4,
+    title: 'Punch',
+    timeout: 4000,
+    color: '#E97461',
+    type: 'attack',
+    value: 15,
+  },
+];
+
 const Battle = ({ socket }) => (
   <BattleContainer>
     <BattleHeader socket={socket} />
 
     <MoveContainer>
-      <BattleMove title="Kick" timeout={2000} color="#E97461" socket={socket} />
-      <BattleMove
-        title="Brace"
-        timeout={1000}
-        color="#008DF0"
-        socket={socket}
-      />
-      <BattleMove title="Heal" timeout={5000} color="#00C19A" socket={socket} />
+      {moves.map((move) => (
+        <BattleMove key={move.id} move={move} socket={socket} />
+      ))}
     </MoveContainer>
   </BattleContainer>
 );

@@ -118,8 +118,8 @@ const Interact = ({ socket, player, users }) => {
       });
     });
 
-    socket.on('battle:start', (_battleState) => {
-      setBattle({ status: true, ..._battleState });
+    socket.on('battle:start', (battle) => {
+      setBattle({ status: true, ...battle });
     });
   }, [socket, nearbyPlayer, setBattle]);
 
