@@ -30,13 +30,21 @@ export const accept =
   async ({ opponent }) => {
     const { username } = socket.handshake.query;
     logger.info(`${username} accepted ${opponent}'s battle proposal!`);
-
-    const battleId = nanoid();
-
     io.to(personalRoom(opponent)).emit('battle:accept', {
       opponent: username,
-      battleId,
     });
+
+    const id = nanoid();
+    const battleState = {
+      id,
+      players: [
+        { username, health: 5000 },
+        { username: opponent, health: 5000 },
+      ],
+    };
+
+    io.to(personalRoom(username)).emit('battle:start', battleState);
+    io.to(personalRoom(opponent)).emit('battle:start', battleState);
   };
 
 export const move = (io, socket) => async () => {

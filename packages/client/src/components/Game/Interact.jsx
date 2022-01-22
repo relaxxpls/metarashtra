@@ -86,7 +86,6 @@ const Interact = ({ socket, player, users }) => {
           onKeyDown: (event) => {
             if (event.key === ' ' && opponent) {
               socket.emit('battle:accept', { opponent });
-              setBattle({ status: true, opponent });
             } else if (event.key === 'Escape') {
               socket.emit('battle:reject', { opponent });
             }
@@ -117,8 +116,10 @@ const Interact = ({ socket, player, users }) => {
         ),
         onKeyDown: () => {},
       });
+    });
 
-      setBattle({ status: true, opponent });
+    socket.on('battle:start', (_battleState) => {
+      setBattle({ status: true, ..._battleState });
     });
   }, [socket, nearbyPlayer, setBattle]);
 

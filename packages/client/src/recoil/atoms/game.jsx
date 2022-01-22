@@ -13,10 +13,7 @@ export const battleState = atom({
   key: 'battleState',
   default: {
     status: false,
-    opponent: null,
-    stats: {
-      health: 100,
-      mana: 100,
-    },
+    id: null,
+    players: [],
   },
 });

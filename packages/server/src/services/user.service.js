@@ -11,17 +11,17 @@ export const createUser = async (userBody) => {
 
 const getKey = (room) => `room:${room}`;
 
-export const updateUser = ({ username, room, userState }) =>
-  redisClient.hSet(getKey(room), username, JSON.stringify(userState));
-
-export const removeUser = ({ username, room }) =>
-  redisClient.hDel(getKey(room), `${username}`);
-
 export const getUser = async ({ username, room }) => {
   const user = await redisClient.hGet(getKey(room), username);
 
   return user ? JSON.parse(user) : null;
 };
+
+export const updateUser = ({ username, room, userState }) =>
+  redisClient.hSet(getKey(room), username, JSON.stringify(userState));
+
+export const removeUser = ({ username, room }) =>
+  redisClient.hDel(getKey(room), `${username}`);
 
 export const getUsersInRoom = async ({ room }) => {
   let usersInRoom = await redisClient.hGetAll(getKey(room));
