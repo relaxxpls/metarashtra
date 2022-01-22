@@ -1,7 +1,14 @@
 import { nanoid } from 'nanoid';
 
 import { logger } from '../../config';
+import {
+  getBattle,
+  removeBattle,
+  updateBattle,
+} from '../../services/battle.service';
 import { personalRoom } from '../FreeRoam';
+
+const MAX_HEALTH = 100;
 
 export const request =
   (io, socket) =>
@@ -34,24 +41,64 @@ export const accept =
       opponent: username,
     });
 
-    const id = nanoid();
+    const battleId = nanoid();
     const battleState = {
-      id,
+      id: battleId,
       players: [
-        { username, health: 5000 },
-        { username: opponent, health: 5000 },
+        { username, health: MAX_HEALTH },
+        { username: opponent, health: MAX_HEALTH },
       ],
     };
+    updateBattle(battleId, battleState);
 
     io.to(personalRoom(username)).emit('battle:start', battleState);
     io.to(personalRoom(opponent)).emit('battle:start', battleState);
   };
 
-export const move = (io, socket) => async () => {
-  const { username } = socket.handshake.query;
-  logger.info(`${username} plays ${move}!`);
+export const update =
+  (io, socket) =>
+  async ({ battleId, move, opponent }) => {
+    const { username } = socket.handshake.query;
+    const { title, type, value } = move;
 
-  io.to(personalRoom(username)).emit('movement', {
-    username,
-  });
-};
+    const battleState = await getBattle(battleId);
+    if (battleState === null) {
+      logger.error(
+        `${username} tried to update a battle that doesn't exist...`
+      );
+      return;
+    }
+
+    logger.info(`[${battleId}] ${username} plays ${title}!`);
+
+    battleState.players = battleState.players.map((player) => {
+      if (player.username === username && type === 'heal')
+        return {
+          ...player,
+          health: Math.min(player.health + value, MAX_HEALTH),
+        };
+      if (player.username === opponent && type === 'attack')
+        return {
+          ...player,
+          health: Math.max(player.health - value, 0),
+        };
+      return player;
+    });
+
+    updateBattle(battleId, battleState);
+
+    io.to(personalRoom(username)).emit('battle:update', battleState);
+    io.to(personalRoom(opponent)).emit('battle:update', battleState);
+  };
+
+export const end =
+  (io, socket) =>
+  ({ battleId }) => {
+    const { username } = socket.handshake.query;
+    logger.info(`[${battleId}] ${username} ended the battle!`);
+
+    removeBattle(battleId);
+
+    io.to(personalRoom(username)).emit('battle:end');
+    io.to(personalRoom(username)).emit('battle:end');
+  };

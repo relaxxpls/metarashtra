@@ -1,11 +1,20 @@
 import { Progress } from 'antd';
 import { darken, lighten } from 'polished';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+
+import { battleState } from '../../recoil/atoms';
+import { filteredOpponentState } from '../../recoil/selectors';
 
 const updateFreq = 50;
 
-const BattleMove = ({ title, timeout, color, socket }) => {
+const BattleMove = ({ move, socket }) => {
+  const battle = useRecoilValue(battleState);
+  const opponentState = useRecoilValue(filteredOpponentState);
+
+  const { title, timeout, color } = move;
+
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
@@ -22,7 +31,11 @@ const BattleMove = ({ title, timeout, color, socket }) => {
 
   const handleMove = () => {
     setProgress(0);
-    socket.emit('battle:move', title);
+    socket.emit('battle:update', {
+      battleId: battle.id,
+      move,
+      opponent: opponentState.username,
+    });
   };
 
   return (
@@ -42,7 +55,6 @@ const BattleMove = ({ title, timeout, color, socket }) => {
             '0%': color,
             '100%': darken(0.1, color),
           }}
-          // strokeColor={darken(0.1, color)}
           showInfo={false}
           style={{
             position: 'absolute',

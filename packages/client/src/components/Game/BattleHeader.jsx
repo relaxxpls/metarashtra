@@ -1,22 +1,26 @@
 import { Progress } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useCallback, useEffect } from 'react';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { battleState, profileState } from '../../recoil/atoms';
+import { battleState } from '../../recoil/atoms';
+import {
+  filteredOpponentState,
+  filteredPlayerState,
+} from '../../recoil/selectors';
 
 const BattleHeader = ({ socket }) => {
-  const [battle, setBattle] = useRecoilState(battleState);
-  const profile = useRecoilValue(profileState);
-  const [stats, setStats] = useState({});
+  const setBattle = useSetRecoilState(battleState);
+  const player = useRecoilValue(filteredPlayerState);
+  const opponent = useRecoilValue(filteredOpponentState);
 
   useEffect(() => {
     if (!socket?.connected) return;
 
-    socket.on('battle:stats', (payload) => {
-      console.log(payload);
+    socket.on('battle:update', (battle) => {
+      setBattle((b) => ({ ...b, ...battle }));
     });
-  }, [socket]);
+  }, [socket, setBattle]);
 
   const getColor = (_percent) => {
     if (_percent > 80) return '#00C19A';
@@ -34,28 +38,23 @@ const BattleHeader = ({ socket }) => {
     []
   );
 
-  const playerPercent = Math.floor(Math.random() * 100);
-  const opponentPercent = Math.floor(Math.random() * 100);
-  const player = profile.username;
-  const { opponent } = battle;
-
   return (
     <BattleInfoContainer>
       <Title>
-        {player} v/s {opponent}
+        {player.username} v/s {opponent.username}
       </Title>
 
       <BattleInfo>
         <PlayerInfo>
-          <span>{player}</span>
+          <span>{player.username}</span>
           <span>lvl 0</span>
         </PlayerInfo>
 
         <Progress
           type="circle"
-          percent={playerPercent}
+          percent={player.health}
           format={getFormattedPercent}
-          strokeColor={getColor(playerPercent)}
+          strokeColor={getColor(player.health)}
           trailColor="transparent"
           width="100px"
         />
@@ -63,15 +62,15 @@ const BattleHeader = ({ socket }) => {
 
       <BattleInfo>
         <PlayerInfo>
-          <span>{opponent ?? 'null'}</span>
+          <span>{opponent.username}</span>
           <span>lvl 0</span>
         </PlayerInfo>
 
         <Progress
           type="circle"
-          percent={opponentPercent}
+          percent={opponent.health}
           format={getFormattedPercent}
-          strokeColor={getColor(opponentPercent)}
+          strokeColor={getColor(opponent.health)}
           trailColor="transparent"
           width="100px"
         />
