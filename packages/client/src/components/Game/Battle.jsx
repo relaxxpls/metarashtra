@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { battleState, profileState } from '../../recoil/atoms';
 
 import BattleMove from './BattleMoves';
+import BattleStatCards from './BattleStatCard';
 
 const Battle = ({ socket }) => {
   const [battle, setBattle] = useRecoilState(battleState);
@@ -14,6 +15,7 @@ const Battle = ({ socket }) => {
       <Title>
         {battle.opponent} v/s {profile.username}
       </Title>
+      <BattleStatCards player={profile.username} opponent={battle.opponent} />
 
       <MoveContainer>
         <BattleMove
