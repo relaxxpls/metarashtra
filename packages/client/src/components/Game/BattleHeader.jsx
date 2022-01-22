@@ -1,8 +1,23 @@
 import { Progress } from 'antd';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-const BattleStatCards = ({ player, opponent }) => {
+import { battleState, profileState } from '../../recoil/atoms';
+
+const BattleHeader = ({ socket }) => {
+  const [battle, setBattle] = useRecoilState(battleState);
+  const profile = useRecoilValue(profileState);
+  const [stats, setStats] = useState({});
+
+  useEffect(() => {
+    if (!socket?.connected) return;
+
+    socket.on('battle:stats', (payload) => {
+      console.log(payload);
+    });
+  }, [socket]);
+
   const getColor = (_percent) => {
     if (_percent > 80) return '#00C19A';
     if (_percent > 20) return '#008DF0';
@@ -21,9 +36,15 @@ const BattleStatCards = ({ player, opponent }) => {
 
   const playerPercent = Math.floor(Math.random() * 100);
   const opponentPercent = Math.floor(Math.random() * 100);
+  const player = profile.username;
+  const { opponent } = battle;
 
   return (
     <BattleInfoContainer>
+      <Title>
+        {player} v/s {opponent}
+      </Title>
+
       <BattleInfo>
         <PlayerInfo>
           <span>{player}</span>
@@ -59,7 +80,25 @@ const BattleStatCards = ({ player, opponent }) => {
   );
 };
 
-export default BattleStatCards;
+export default BattleHeader;
+
+const Title = styled.h1`
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  transform: translate(-50%, 0);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  color: #fff;
+  background-color: #000a;
+  backdrop-filter: blur(0.25rem);
+  border-radius: 8px;
+`;
 
 const BattleInfoContainer = styled.div`
   display: flex;
@@ -73,8 +112,9 @@ const BattleInfo = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #0008;
+  backdrop-filter: blur(0.25rem);
   color: #fff;
-  padding: 0.75rem 1rem 0.5rem;
+  padding: 1rem;
   gap: 1rem;
   width: fit-content;
   border-radius: 0.5rem;
