@@ -1,0 +1,44 @@
+{
+    "name": "Maurya #1",
+    "description": "The Mauryas are Iron-Age troopers who ruled South Asia.",
+    "external_link": " ",
+    "traits": [
+        {
+            "trait_type": "Stamina",
+            "value": 8000,
+            "max_value": 65535
+        },
+        {
+            "trait_type": "Attack",
+            "value": 60,
+            "max_value": 255
+        },
+        {
+            "trait_type": "Defence",
+            "value": 45,
+            "max_value": 255
+        },
+        {
+            "trait_type": "Speed",
+            "value": 50,
+            "max_value": 255
+        },
+        {
+            "trait_type": "Luck",
+            "value": 55,
+            "max_value": 255
+        },
+        {
+            "trait_type": "Dynasty",
+            "value": "Maurya"
+        },
+        {
+            "trait_type": "Strength",
+            "value": "Attack"
+        },
+        {
+            "trait_type": "Weakness",
+            "value": "Defence"
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Chola #1",
+  "description": "The Cholas are vicious, sea-faring conquerors from Southern India.",
+  "external_link": " ",
+  "traits": [
+    {
+      "trait_type": "Stamina",
+      "value": 9000,
+      "max_value": 65535
+    },
+    {
+      "trait_type": "Attack",
+      "value": 40,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Defence",
+      "value": 50,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Speed",
+      "value": 60,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Luck",
+      "value": 55,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Dynasty",
+      "value": "Chola"
+    },
+    {
+      "trait_type": "Strength",
+      "value": "Speed"
+    },
+    {
+      "trait_type": "Weakness",
+      "value": "Attack"
+    }
+  ]
+}

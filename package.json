@@ -19,6 +19,7 @@
     "contracts:verify": "yarn workspace @metarashtra/smart-contracts verify"
   },
   "workspaces": [
+    "packages/art-engine",
     "packages/client",
     "packages/eslint-config",
     "packages/server",

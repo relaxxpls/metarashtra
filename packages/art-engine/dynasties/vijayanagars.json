@@ -1,0 +1,44 @@
+{
+  "name": "Vijayanagar #1",
+  "description": "The Vijayanagar soldiers are ruthless rebels from the Deccan Plateau.",
+  "external_link": " ",
+  "traits": [
+    {
+      "trait_type": "Stamina",
+      "value": 9000,
+      "max_value": 65535
+    },
+    {
+      "trait_type": "Attack",
+      "value": 40,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Defence",
+      "value": 60,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Speed",
+      "value": 55,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Luck",
+      "value": 50,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Dynasty",
+      "value": "Vijayanagar"
+    },
+    {
+      "trait_type": "Strength",
+      "value": "Defence"
+    },
+    {
+      "trait_type": "Weakness",
+      "value": "Attack"
+    }
+  ]
+}

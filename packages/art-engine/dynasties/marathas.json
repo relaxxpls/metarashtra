@@ -1,0 +1,44 @@
+{
+  "name": "Maratha #1",
+  "description": "The Marathas are powerful warriors who controlled the Indian subcontinent.",
+  "external_link": " ",
+  "traits": [
+    {
+      "trait_type": "Stamina",
+      "value": 9000,
+      "max_value": 65535
+    },
+    {
+      "trait_type": "Attack",
+      "value": 50,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Defence",
+      "value": 55,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Speed",
+      "value": 60,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Luck",
+      "value": 40,
+      "max_value": 255
+    },
+    {
+      "trait_type": "Dynasty",
+      "value": "Maratha"
+    },
+    {
+      "trait_type": "Strength",
+      "value": "Speed"
+    },
+    {
+      "trait_type": "Weakness",
+      "value": "Luck"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@metarashtra/art-engine",
+  "version": "1.0.0",
+  "main": "./index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@metarashtra/eslint-config": "^1.0.0"
+  }
+}
