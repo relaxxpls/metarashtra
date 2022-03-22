@@ -57,7 +57,7 @@ export const accept =
 
 export const update =
   (io, socket) =>
-  async ({ battleId, move, opponent }) => {
+  async ({ battleId, opponent, move }) => {
     const { username } = socket.handshake.query;
     const { title, type, value } = move;
 
@@ -72,33 +72,46 @@ export const update =
     logger.info(`[${battleId}] ${username} plays ${title}!`);
 
     battleState.players = battleState.players.map((player) => {
+      let { health } = player;
       if (player.username === username && type === 'heal')
-        return {
-          ...player,
-          health: Math.min(player.health + value, MAX_HEALTH),
-        };
-      if (player.username === opponent && type === 'attack')
-        return {
-          ...player,
-          health: Math.max(player.health - value, 0),
-        };
-      return player;
+        health = Math.min(player.health + value, MAX_HEALTH);
+      else if (player.username === opponent && type === 'attack')
+        health = Math.max(player.health - value, 0);
+
+      return { ...player, health };
     });
 
-    updateBattle(battleId, battleState);
+    const loser = battleState.players.find((player) => player.health === 0);
+    if (loser) {
+      logger.info(`[${battleId}] ${loser.username} lost!`);
+      removeBattle(battleId);
 
-    io.to(personalRoom(username)).emit('battle:update', battleState);
-    io.to(personalRoom(opponent)).emit('battle:update', battleState);
+      const battleEnd = {
+        winner: username,
+        loser: loser.username,
+      };
+      io.to(personalRoom(username)).emit('battle:end', battleEnd);
+      io.to(personalRoom(opponent)).emit('battle:end', battleEnd);
+    } else {
+      updateBattle(battleId, battleState);
+
+      io.to(personalRoom(username)).emit('battle:update', battleState);
+      io.to(personalRoom(opponent)).emit('battle:update', battleState);
+    }
   };
 
-export const end =
+export const forfiet =
   (io, socket) =>
-  ({ battleId }) => {
+  ({ battleId, opponent }) => {
     const { username } = socket.handshake.query;
-    logger.info(`[${battleId}] ${username} ended the battle!`);
+    logger.info(`[${battleId}] ${username} forfeits, ${opponent} wins!`);
 
     removeBattle(battleId);
 
-    io.to(personalRoom(username)).emit('battle:end');
-    io.to(personalRoom(username)).emit('battle:end');
+    const battleEnd = {
+      winner: opponent,
+      loser: username,
+    };
+    io.to(personalRoom(username)).emit('battle:end', battleEnd);
+    io.to(personalRoom(opponent)).emit('battle:end', battleEnd);
   };

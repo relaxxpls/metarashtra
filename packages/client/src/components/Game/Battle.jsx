@@ -1,4 +1,8 @@
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+
+import { battleState } from '../../recoil/atoms';
 
 import BattleHeader from './BattleHeader';
 import BattleMove from './BattleMoves';
@@ -38,17 +42,27 @@ const moves = [
   },
 ];
 
-const Battle = ({ socket }) => (
-  <BattleContainer>
-    <BattleHeader socket={socket} />
+const Battle = ({ socket }) => {
+  const [battle, setBattle] = useRecoilState(battleState);
 
-    <MoveContainer>
-      {moves.map((move) => (
-        <BattleMove key={move.id} move={move} socket={socket} />
-      ))}
-    </MoveContainer>
-  </BattleContainer>
-);
+  useEffect(() => {
+    socket.on('battle:end', ({ winner, loser }) => {
+      // setBattle(data);
+    });
+  }, [socket, setBattle]);
+
+  return (
+    <BattleContainer>
+      <BattleHeader socket={socket} />
+
+      <MoveContainer>
+        {moves.map((move) => (
+          <BattleMove key={move.id} move={move} socket={socket} />
+        ))}
+      </MoveContainer>
+    </BattleContainer>
+  );
+};
 
 export default Battle;
 

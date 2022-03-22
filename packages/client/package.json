@@ -1,7 +1,7 @@
 {
   "name": "@metarashtra/client",
   "version": "1.0.0",
-  "description": "NextJS + StyledComponents client for Metarashtra",
+  "description": "NextJS + Ethers client for Metarashtra",
   "repository": "https://github.com/relaxxpls/metarashtra",
   "license": "MIT",
   "private": true,

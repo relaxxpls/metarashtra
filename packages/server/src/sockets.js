@@ -24,6 +24,7 @@ const attachSockets = async (httpServer) => {
     socket.on('battle:accept', Battle.accept(io, socket));
     socket.on('battle:reject', Battle.reject(io, socket));
     socket.on('battle:update', Battle.update(io, socket));
+    socket.on('battle:forfiet', Battle.forfiet(io, socket));
   });
 };
 
