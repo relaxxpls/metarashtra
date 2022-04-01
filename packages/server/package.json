@@ -13,20 +13,20 @@
   "dependencies": {
     "@socket.io/redis-adapter": "^7.1.0",
     "cors": "^2.8.5",
-    "dotenv": "^14.2.0",
-    "express": "^4.17.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "express-graphql": "^0.12.0",
-    "graphql": "^16.2.0",
+    "graphql": "^16.3.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.7",
+    "mongoose": "^6.2.9",
     "morgan": "^1.10.0",
-    "nanoid": "^3.2.0",
+    "nanoid": "^3.3.2",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
-    "redis": "^4.0.2",
+    "redis": "^4.0.6",
     "socket.io": "^4.4.1",
     "validator": "^13.7.0",
-    "winston": "^3.4.0"
+    "winston": "^3.6.0"
   },
   "devDependencies": {
     "@metarashtra/eslint-config": "^1.0.0",
